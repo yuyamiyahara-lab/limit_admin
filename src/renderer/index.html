@@ -5,8 +5,33 @@
     <title>リミット管理</title>
   </head>
   <body>
-    <h1>Hello World!</h1>
+    <aside class="sidebar">
+      <div class="sidebar__title">
+          <img src="./assets/images/app-icon.svg"> リミット管理
+      </div>
+      
+      <nav class="sidebar__nav">
+          <button class="sidebar__nav-btn active" data-target="view-home">
+              <img src="./assets/images/home-icon.svg"> ホーム
+          </button>
+          <button class="nav-btn" data-target="view-add">
+              <img src="./assets/images/add-icon.svg"> 食材の追加
+          </button>
+          <button class="nav-btn" data-target="view-manage">
+              <img src="./assets/images/manage-icon.svg"> 食材の管理
+          </button>
+          <button class="nav-btn" data-target="view-recipe">
+              <img src="./assets/images/recipe-icon.svg"> レシピ提案
+          </button>
+      </nav>
 
+    </aside>
+    <main class="main">
+      <div class="screen-home"></div>
+      <div class="screen-recipe"></div>
+      <div class="screen-add"></div>
+      <div class="screen-manage"></div>
+    </main>
     <script type="module" src="/src/main.js"></script>
   </body>
 </html>
