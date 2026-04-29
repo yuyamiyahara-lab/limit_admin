@@ -1,4 +1,11 @@
-@use 'variables' as v;
+@use 'variables' as *;
+
+@font-face {
+  font-family: 'NotoSansJP';
+  src: url('./fonts/NotoSansJP-VariableFont_wght.ttf');
+  font-weight: 100 900;
+  font-style: normal;
+}
 
 // ① 箱のサイズ計算を直感的にする（必須級！）
 *, *::before, *::after {
@@ -9,7 +16,7 @@
 body {
   margin: 0;       // ブラウザ特有の謎の隙間を消す
   padding: 0;
-  font-family: 'Segoe UI', Meiryo, system-ui, sans-serif; // OSに合わせた綺麗なフォント
+  font-family: 'NotoSansJP', 'Segoe UI', Meiryo, system-ui, sans-serif; // OSに合わせた綺麗なフォント
   background-color: #f5f5f5; // アプリの背景色（好きな色でOK）
   color: #333;               // 基本の文字色
   
@@ -32,16 +39,24 @@ button {
 
 body {
   display: flex;
-  min-height: 100vh;
+  height: 100vh; // min-heightからheightに変更し、画面ぴったりに固定
   margin: 0;
+  overflow: hidden; // body自体はスクロールさせない
 }
 
 .sidebar {
-    background-color: v.$primary-color;
+    background-color: $primary-color;
     width: 250px;
+    flex-shrink: 0;
+    
+    // 【ここを追加】高さを画面いっぱいに指定
+    height: 100%; 
 }
 
 .main {
-    background-color: v.$bg-body;
-    width: 550px;
+    background-color: $bg-body;
+    flex-grow: 1;
+    
+    // 【ここを追加】高さを画面いっぱいに指定
+    height: 100%; 
 }
