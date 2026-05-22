@@ -60,3 +60,10 @@ body {
     // 【ここを追加】高さを画面いっぱいに指定
     height: 100%; 
 }
+
+.inactive {
+  display: none;
+}
+.active {
+  display: block;
+}

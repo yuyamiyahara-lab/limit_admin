@@ -35,10 +35,84 @@
     </div>
   </aside>
   <main class="main --has-scroll" data-simplebar>
-    <div class="screen-home active"></div>
-    <div class="screen-recipe inactive"></div>
-    <div class="screen-add inactive"></div>
-    <div class="screen-manage inactive"></div>
+
+    <div class="screen-home active">
+      <div class="summary">
+        <div class="summary__container">
+          <div class="summary__number" id="expiring-count">0</div>
+          <div class="summary__text">期間間近の食材</div>
+        </div>
+        <div class="summary__container">
+          <div class="summary__number" id="registered-count">0</div>
+          <div class="summary__text">登録中の食材</div>
+        </div>
+      </div>
+
+      <div class="food-list">
+        <h2 class="food-list__title">期限が近い食材</h2>
+        <div class="food-list__items">
+          <div class="card">
+            <div class="card__meta">
+              <div class="card__name"></div>
+              <div class="card__deadline"></div>
+            </div>
+            <div class="card__amount"></div>
+            <div class="card__days-left"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="screen-recipe inactive">い</div>
+
+    <div class="screen-add inactive">
+      <div class="form__container">
+        <!-- 識別用に、追加フォームには class="js-add-form" をつけておく -->
+        <form class="js-add-form">
+
+          <div class="form__group--full">
+            <label class="label">食材名</label>
+            <input type="text" name="name" required>
+          </div>
+
+          <div class="form--row">
+            <div class="form__group">
+              <label class="label">量</label>
+              <input type="number" name="amount" min="0" step="any" required>
+            </div>
+
+            <div class="form__group">
+              <label class="label">単位</label>
+              <input type="text" name="unit">
+            </div>
+
+            <div class="form__group">
+              <label class="label">期限</label>
+              <input type="date" name="deadline" required>
+            </div>
+
+            <div class="form__group">
+              <label class="label"></label>
+              <select name="type">
+                <option value="賞味期限">賞味期限</option>
+                <option value="消費期限">消費期限</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form__group--full">
+            <label class="label" for="food-name">備考</label>
+            <textarea name="notes" placeholder="メモや補足（例：冷凍保存中、早めに使うなど）"></textarea>
+          </div>
+
+          <button type="submit" class="form__submit">リストに追加</button>
+
+        </form>
+      </div>
+    </div>
+
+    <div class="screen-manage inactive">え</div>
+
   </main>
   <script type="module" src="/src/main.js"></script>
 </body>
