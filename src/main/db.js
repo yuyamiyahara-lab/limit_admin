@@ -33,6 +33,25 @@ export function initDatabase() {
     return info.lastInsertRowid;
   });
 
+  // 変更用の処理を追加
+  ipcMain.handle('update-ingredient', (event, data) => {
+    const { id, name, amount, unit, type, deadline, remarks } = data;
+    const stmt = db.prepare(`
+      UPDATE ingredients 
+      SET name = ?, amount = ?, unit = ?, type = ?, deadline = ?, remarks = ?
+      WHERE id = ?
+    `);
+    const info = stmt.run(name, amount, unit, type, deadline, remarks, id);
+    return info.changes > 0; // 更新が成功したらtrueを返す
+  });
+
+  // 削除用の処理を追加
+  ipcMain.handle('delete-ingredient', (event, id) => {
+    const stmt = db.prepare('DELETE FROM ingredients WHERE id = ?');
+    const info = stmt.run(id);
+    return info.changes > 0; // 削除が成功したらtrueを返す
+  });
+
   ipcMain.handle('get-ingredients', (event, sortBy = 'deadline') => {
     let query = '';
     

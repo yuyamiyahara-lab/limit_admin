@@ -6,7 +6,11 @@ const api = {
   // 1. 食材を登録する（db.jsのadd-ingredientを実行する）
   addIngredient: (data) => ipcRenderer.invoke('add-ingredient', data),
   // 2. 食材を取得する
-  getIngredients: (sortBy) => ipcRenderer.invoke('get-ingredients', sortBy)
+  getIngredients: (sortBy) => ipcRenderer.invoke('get-ingredients', sortBy),
+  // 3. 食材を更新する
+  updateIngredient: (data) => ipcRenderer.invoke('update-ingredient', data),
+  // 4. 食材を削除する
+  deleteIngredient: (id) => ipcRenderer.invoke('delete-ingredient', id)
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to

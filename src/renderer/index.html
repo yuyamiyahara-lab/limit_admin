@@ -49,7 +49,7 @@
       </div>
 
       <div class="food-list">
-        <h2 class="food-list__title">期限が近い食材</h2>
+        <h3 class="food-list__title">期限が近い食材</h3>
         <div class="food-list__items">
           <div class="card">
             <div class="card__meta">
@@ -66,6 +66,9 @@
     <div class="screen-recipe inactive">い</div>
 
     <div class="screen-add inactive">
+      <div class="screen-add__title">
+        <h2>食材の追加</h2>
+      </div>
       <div class="form__container">
         <!-- 識別用に、追加フォームには class="js-add-form" をつけておく -->
         <form class="js-add-form">
@@ -109,10 +112,32 @@
 
         </form>
       </div>
+
+      <div class="mini-food-list">
+        <h3 class="mini-food-list__title">最近追加した食材</h3>
+        <div class="mini-food-list__items"></div>
+      </div>
     </div>
 
-    <div class="screen-manage inactive">え</div>
+    <div class="screen-manage inactive">
+      <div class="screen-manage__header">
+        <div class="screen-manage__title">
+          <h2>食材の管理</h2>
+        </div>
 
+        <div class="sort-container">
+          <select id="manage-sort-order">
+            <option value="deadline">期限が近い順</option>
+            <option value="created_at">登録が新しい順</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="food-list">
+        <div class="food-list__items" id="manage-food-list">
+        </div>
+      </div>
+    </div>
   </main>
   <script type="module" src="/src/main.js"></script>
 </body>
