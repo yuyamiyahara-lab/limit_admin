@@ -63,12 +63,63 @@
       </div>
     </div>
 
-    <div class="screen-recipe inactive">い</div>
+    <div class="screen-recipe inactive">
+      <div class="screen-recipe__title">
+        <h2>レシピ提案</h2>
+      </div>
+    </div>
 
     <div class="screen-add inactive">
       <div class="screen-add__title">
         <h2>食材の追加</h2>
       </div>
+
+      <div class="screen-add__frequent">
+        <div class="screen-add__frequent--meta">
+          <h3 class="screen-add__frequent-title">よく追加するもの</h3>
+          <button class="screen-add__frequent-edit">編集</button>
+        </div>
+        <div class="screen-add__frequent-items" id="frequent-items-container">
+          <button type="button" class="btn-add-frequent" id="js-open-frequent-modal-btn">＋ 登録</button>
+        </div>
+      </div>
+
+      <div class="form__container--frequent js-frequent-modal inactive">
+        <form class="js-frequent-form">
+
+          <div class="form__group--full">
+            <label class="label">食材名</label>
+            <input type="text" name="name" required>
+          </div>
+
+          <div class="form--row">
+            <div class="form__group">
+              <label class="label">量</label>
+              <input type="number" name="amount" min="0" step="any">
+            </div>
+
+            <div class="form__group">
+              <label class="label">単位</label>
+              <input type="text" name="unit">
+            </div>
+
+            <div class="form__group">
+              <label class="label">種類</label>
+              <select name="type">
+                <option value="賞味期限">賞味期限</option>
+                <option value="消費期限">消費期限</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form__actions">
+            <button type="submit" class="form__submit">マスターに登録</button>
+            <button type="button" class="form__cancel js-close-frequent-modal-btn">キャンセル</button>
+          </div>
+
+        </form>
+      </div>
+
       <div class="form__container">
         <!-- 識別用に、追加フォームには class="js-add-form" をつけておく -->
         <form class="js-add-form">

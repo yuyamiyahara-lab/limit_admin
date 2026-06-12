@@ -10,7 +10,11 @@ const api = {
   // 3. 食材を更新する
   updateIngredient: (data) => ipcRenderer.invoke('update-ingredient', data),
   // 4. 食材を削除する
-  deleteIngredient: (id) => ipcRenderer.invoke('delete-ingredient', id)
+  deleteIngredient: (id) => ipcRenderer.invoke('delete-ingredient', id),
+
+  getFrequents: () => ipcRenderer.invoke('get-frequents'),
+  addFrequent: (data) => ipcRenderer.invoke('add-frequent', data),
+  deleteFrequent: (id) => ipcRenderer.invoke('delete-frequent', id),
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to

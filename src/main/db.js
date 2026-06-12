@@ -1,6 +1,7 @@
 import { app, ipcMain } from 'electron'
 import path from 'path'
 import Database from 'better-sqlite3'
+import { types } from 'util';
 
 let db;
 
@@ -66,5 +67,39 @@ export function initDatabase() {
 
     const stmt = db.prepare(query);
     return stmt.all();
+  });
+
+  // 1. よく追加するもの専用の「別テーブル」を作成（数量・単位は空でもいいのでNULL許容）
+  db.exec(`
+    CREATE TABLE IF NOT EXISTS frequent_ingredients (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      name TEXT NOT NULL,
+      amount REAL,
+      unit TEXT,
+      type TEXT 
+    )
+  `);
+
+  // 2. よく追加するものの登録処理
+  ipcMain.handle('add-frequent', (event, data) => {
+    const { name, amount, unit, type } = data;
+    const stmt = db.prepare(`
+      INSERT INTO frequent_ingredients (name, amount, unit, type) VALUES (?, ?, ?, ?)
+    `);
+    const info = stmt.run(name, amount, unit, type);
+    return info.lastInsertRowid;
+  });
+
+  // 3. よく追加するものの全取得処理
+  ipcMain.handle('get-frequents', () => {
+    const stmt = db.prepare('SELECT * FROM frequent_ingredients ORDER BY name ASC');
+    return stmt.all();
+  });
+
+  // 4. よく追加するものの削除処理
+  ipcMain.handle('delete-frequent', (event, id) => {
+    const stmt = db.prepare('DELETE FROM frequent_ingredients WHERE id = ?');
+    const info = stmt.run(id);
+    return info.changes > 0; // 削除が成功したらtrueを返す
   });
 }
