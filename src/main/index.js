@@ -12,6 +12,7 @@ function createWindow() {
   const mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
+    useContentSize: true,
     resizable: false,
     show: false,
     autoHideMenuBar: true,
@@ -104,7 +105,7 @@ ipcMain.handle('send-recipe-chat', async (event, ingredientsPrompt, chatHistory)
     // 3. モデルを指定
     const model = genAI.getGenerativeModel({ 
       model: 'models/gemini-2.5-flash',
-      systemInstruction: "あなたはプロの料理研究家です。ユーザーが持っている食材を使った美味しくて作りやすいレシピを提案してください。"
+      systemInstruction: "あなたはプロの料理研究家です。挨拶や前置きは省略し、提示された食材情報に基づいて、すぐに提案する料理の簡単な説明と具体的なレシピを提案してください。"
     });
 
     // 画面から受け取った「現在の食材リスト」を会話の先頭に追加

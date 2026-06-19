@@ -90,6 +90,18 @@ function setupRecipeChatHandler() {
     if (sender === 'ai' && !isLoading) {
       // AIからの返答はMarkdownとしてパースしてHTMLに変換
       messageDiv.innerHTML = marked.parse(text);
+
+      // 「このレシピを保存する」ボタンを作成
+      const saveButton = document.createElement('button');
+      saveButton.textContent = 'このレシピを保存する';
+      saveButton.className = 'btn-save-recipe'; // スタイル付けのためのクラス
+      saveButton.style.marginTop = '5px'; // ボタンの上に少し余白を追加
+      saveButton.onclick = () => {
+        // とりあえずコンソールにログを出すモック実装
+        console.log('レシピ保存ボタンがクリックされました');
+        alert('レシピの保存機能は現在準備中です。');
+      };
+      messageDiv.appendChild(saveButton);
     } else {
       // ユーザーやシステムメッセージ、ローディング中はそのままテキストとして表示
       messageDiv.innerText = text;
