@@ -1,15 +1,15 @@
+import { marked } from 'marked';
 // ------------------------------
 // レシピ提案（AIチャット）画面の処理
 // ------------------------------
-
 document.addEventListener('DOMContentLoaded', () => {
   setupRecipeChatHandler();
 });
 
 function setupRecipeChatHandler() {
-  const chatForm = document.querySelector('.js-recipe-form'); // 送信フォーム
-  const chatInput = document.querySelector('.js-recipe-input'); // テキスト入力欄
-  const chatMessagesArea = document.querySelector('.js-recipe-messages'); // メッセージの表示エリア
+  const chatForm = document.querySelector('.js-recipe-form');
+  const chatInput = document.querySelector('.js-recipe-input');
+  const chatMessagesArea = document.querySelector('.js-recipe-messages');
 
   if (!chatForm || !chatInput || !chatMessagesArea) return;
 
@@ -22,64 +22,59 @@ function setupRecipeChatHandler() {
     const userText = chatInput.value.trim();
     if (!userText) return;
 
-    // 1. ユーザーのメッセージを画面に表示して入力欄を空にする
+    // 1. ユーザー発言の表示と追加
     appendMessage(userText, 'user');
     chatInput.value = '';
 
-    // 2. 履歴にユーザーの発言を追加
+    // 履歴にユーザーの発言を追加
     chatHistory.push({
       role: 'user',
       parts: [{ text: userText }]
     });
 
-    // 3. ローディング表示を出す
+    // 2. ローディング表示
     const loadingId = appendMessage('AIがレシピを考え中...', 'ai', true);
 
     try {
-      // 4. 設定画面で保存したAPIキーを取得
-      const apiKey = await window.api.getApiKey();
-      if (!apiKey) {
-        removeMessage(loadingId);
-        appendMessage('APIキーが設定されていません。設定画面からGeminiのAPIキーを保存してください。', 'system');
+      // 3. DBから現在の食材リストを取得
+      const ingredients = await window.api.getIngredients();
+      let ingredientsPrompt = '現在、冷蔵庫には以下の食材があります。この情報も踏まえてレシピを提案してください。\n\n';
+      if (ingredients.length > 0) {
+        ingredients.forEach(item => {
+          ingredientsPrompt += `- ${item.name} (${item.amount}${item.unit || ''}) ${item.type}: ${item.deadline}\n`;
+        });
+      } else {
+        ingredientsPrompt += '現在、登録されている食材はありません。\n';
+      }
+
+      // 4. メインプロセスに「現在の食材リスト」「会話履歴」を投げて、結果を待つ
+      //（APIキーはrenderer側には見えない）
+      const result = await window.api.sendRecipeChat(ingredientsPrompt, chatHistory);
+
+      removeMessage(loadingId);
+
+      if (!result.success) {
+        if (result.error === 'API_KEY_NOT_FOUND') {
+          appendMessage('APIキーが設定されていません。設定画面から保存してください。', 'system');
+        } else if (result.error === 'API_KEY_INVALID') {
+          appendMessage('APIキーが正しくありません。設定画面から正しいキーを保存してください。', 'system');
+        } else {
+          appendMessage('エラーが発生しました。時間を置いて試すか、APIキーを確認してください。', 'system');
+        }
         return;
       }
 
-      // 5. GeminiのAPIを直接呼び出してチャットする（Gemini 1.5 Flashを使用）
-      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          contents: chatHistory,
-          // system_instructionでAIのキャラクター付けをします
-          system_instruction: {
-            parts: [{ text: "あなたはプロの料理研究家です。ユーザーが持っている食材を使った美味しくて作りやすいレシピを提案してください。返答は親しみやすいトーンでお願いします。" }]
-          }
-        })
-      });
-
-      if (!response.ok) {
-        throw new Error(`APIリクエストに失敗しました: ${response.status}`);
-      }
-
-      const data = await response.json();
-      const aiResponseText = data.candidates[0].content.parts[0].text;
-
-      // 6. ローディングを消してAIの回答を表示
-      removeMessage(loadingId);
-      appendMessage(aiResponseText, 'ai');
-
-      // 7. 履歴にAIの回答を追加
+      // 5. AIの回答を表示して履歴に追加
+      appendMessage(result.text, 'ai');
       chatHistory.push({
-        role: 'model',
-        parts: [{ text: aiResponseText }]
+        role: 'model', // SDKを使う場合、AI側のroleは 'model' にします
+        parts: [{ text: result.text }]
       });
 
     } catch (error) {
-      console.error('Gemini APIエラー:', error);
+      console.error(error);
       removeMessage(loadingId);
-      appendMessage('エラーが発生しました。APIキーが正しいか確認してください。', 'system');
+      appendMessage('通信エラーが発生しました。', 'system');
     }
   });
 
@@ -91,7 +86,14 @@ function setupRecipeChatHandler() {
       messageDiv.id = `loading-${Date.now()}`;
       messageDiv.style.opacity = '0.5';
     }
-    messageDiv.innerText = text;
+
+    if (sender === 'ai' && !isLoading) {
+      // AIからの返答はMarkdownとしてパースしてHTMLに変換
+      messageDiv.innerHTML = marked.parse(text);
+    } else {
+      // ユーザーやシステムメッセージ、ローディング中はそのままテキストとして表示
+      messageDiv.innerText = text;
+    }
     chatMessagesArea.appendChild(messageDiv);
     return messageDiv.id;
   }

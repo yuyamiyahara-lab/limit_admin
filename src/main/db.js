@@ -102,36 +102,4 @@ export function initDatabase() {
     const info = stmt.run(id);
     return info.changes > 0; // 削除が成功したらtrueを返す
   });
-
-  // 5. 設定用のテーブルを作成（APIキーなどを保存）
-  db.exec(`
-    CREATE TABLE IF NOT EXISTS settings (
-      key TEXT PRIMARY KEY,
-      value TEXT
-    )
-  `);
-
-  // APIキーの保存処理
-  ipcMain.handle('save-api-key', (event, apiKey) => {
-    // まず既に保存されているかチェック
-    const checkStmt = db.prepare("SELECT * FROM settings WHERE key = 'gemini_api_key'");
-    const existing = checkStmt.get();
-
-    if (existing) {
-      // あれば更新
-      const stmt = db.prepare("UPDATE settings SET value = ? WHERE key = 'gemini_api_key'");
-      stmt.run(apiKey);
-    } else {
-      // なければ新規登録
-      const stmt = db.prepare("INSERT INTO settings (key, value) VALUES ('gemini_api_key', ?)");
-      stmt.run(apiKey);
-    }
-  });
-
-  // APIキーの取得処理
-  ipcMain.handle('get-api-key', () => {
-    const stmt = db.prepare("SELECT value FROM settings WHERE key = 'gemini_api_key'");
-    const row = stmt.get();
-    return row ? row.value : '';
-  });
 }

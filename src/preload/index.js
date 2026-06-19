@@ -18,6 +18,9 @@ const api = {
 
   getApiKey: () => ipcRenderer.invoke('get-api-key'),
   saveApiKey: (key) => ipcRenderer.invoke('save-api-key', key),
+  // チャット機能
+  sendRecipeChat: (ingredientsPrompt, chatHistory) =>
+    ipcRenderer.invoke('send-recipe-chat', ingredientsPrompt, chatHistory)
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to

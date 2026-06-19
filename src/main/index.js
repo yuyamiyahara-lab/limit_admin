@@ -1,8 +1,11 @@
 import { app, shell, BrowserWindow, ipcMain } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
+import Store from 'electron-store'
+import { GoogleGenerativeAI } from '@google/generative-ai' // SDKの読み込み
 import icon from '../../resources/icon.png?asset'
 import { initDatabase } from './db.js'
+
 
 function createWindow() {
   // Create the browser window.
@@ -74,3 +77,56 @@ app.on('window-all-closed', () => {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
+
+const store = new Store({ encryptionKey: 'your-safe-encryption-key-here' }); // APIキーなどを安全に保存
+
+// --- APIキーの保存・取得処理を electron-store を使うように統一 ---
+// APIキーの保存
+ipcMain.handle('save-api-key', (event, apiKey) => {
+  store.set('geminiApiKey', apiKey);
+});
+
+// APIキーの取得
+ipcMain.handle('get-api-key', () => {
+  return store.get('geminiApiKey', ''); // 保存されていなければ空文字を返す
+});
+
+// レンスラーからチャット要請が来たときの処理
+ipcMain.handle('send-recipe-chat', async (event, ingredientsPrompt, chatHistory) => {
+  try {
+    // 1. 保存されているAPIキーを取得
+    const apiKey = store.get('geminiApiKey'); // db.jsとキー名を合わせる
+    if (!apiKey) throw new Error('API_KEY_NOT_FOUND');
+
+    // 2. Gemini APIの初期化
+    const genAI = new GoogleGenerativeAI(apiKey);
+    
+    // 3. モデルを指定
+    const model = genAI.getGenerativeModel({ 
+      model: 'models/gemini-2.5-flash',
+      systemInstruction: "あなたはプロの料理研究家です。ユーザーが持っている食材を使った美味しくて作りやすいレシピを提案してください。"
+    });
+
+    // 画面から受け取った「現在の食材リスト」を会話の先頭に追加
+    const fullHistory = [
+      { role: 'user', parts: [{ text: ingredientsPrompt }] },
+      ...chatHistory
+    ];
+
+    // 4. 通信を実行（rendererから送られてきた純粋な履歴をそのまま渡す）
+    const result = await model.generateContent({ contents: fullHistory });
+    const response = result.response;
+
+    // 5. AIのテキストだけを画面に返す
+    const text = response.text();
+    return { success: true, text: text };
+
+  } catch (error) {
+    console.error('Gemini Error:', error);
+    // APIキーが不正な場合などのエラーをハンドリング
+    if (error.message.includes('API key not valid')) {
+      return { success: false, error: 'API_KEY_INVALID' };
+    }
+    return { success: false, error: error.message };
+  }
+});
