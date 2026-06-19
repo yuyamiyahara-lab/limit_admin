@@ -60,4 +60,12 @@
             }
         }
     }
+
+    &__control {
+        display: flex;
+
+        button {
+            display: block;
+        }
+    }
 }

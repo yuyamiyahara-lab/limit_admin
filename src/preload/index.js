@@ -15,6 +15,9 @@ const api = {
   getFrequents: () => ipcRenderer.invoke('get-frequents'),
   addFrequent: (data) => ipcRenderer.invoke('add-frequent', data),
   deleteFrequent: (id) => ipcRenderer.invoke('delete-frequent', id),
+
+  getApiKey: () => ipcRenderer.invoke('get-api-key'),
+  saveApiKey: (key) => ipcRenderer.invoke('save-api-key', key),
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to

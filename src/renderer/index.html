@@ -32,6 +32,10 @@
           <span>レシピ提案</span>
         </button>
       </nav>
+      <div class="sidebar__control">
+        <button class="sidebar__settings" data-target="view-settings">設定</button>
+        <button class="sidebar__power">電源</button>
+      </div>
     </div>
   </aside>
   <main class="main --has-scroll" data-simplebar>
@@ -66,6 +70,20 @@
     <div class="screen-recipe inactive">
       <div class="screen-recipe__title">
         <h2>レシピ提案</h2>
+      </div>
+
+      <div class="chat-area">
+        <div class="chat-area__wrap --has-scroll" data-simplebar>
+          <div class="js-recipe-messages">
+            <div class="chat-area__message--ai">
+              <p>何を使ったレシピを提案しましょうか？</p>
+            </div>
+          </div>
+        </div>
+        <form class="chat-area__input js-recipe-form">
+          <textarea class="js-recipe-input" placeholder="食材や気分を入力してください"></textarea>
+          <button type="submit" class="chat-area__submit">送信</button>
+        </form>
       </div>
     </div>
 
@@ -187,6 +205,21 @@
       <div class="food-list">
         <div class="food-list__items" id="manage-food-list">
         </div>
+      </div>
+    </div>
+
+    <div class="screen-settings inactive">
+      <div class="screen-settings__title">
+        <h2>設定</h2>
+      </div>
+      <div class="screen-settings__content">
+        <h3>apiキー</h3>
+        
+        <div class="screen-settings__form-group">
+          <input type="text" class="screen-settings__input" placeholder="ここにAPIキーを入力">
+          <button class="screen-settings__button">保存</button>
+        </div>
+
       </div>
     </div>
   </main>
