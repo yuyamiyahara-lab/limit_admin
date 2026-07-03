@@ -49,11 +49,12 @@ async function renderManageFoodList(sortBy = 'deadline') {
           <div class="card__amount">${item.amount}${item.unit}</div>
           
           <div class="card__actions">
-            <div class="card__menu"><button class="js-edit-btn">編集</button></div>
-            <div class="card__delete"><button class="js-delete-btn" data-id="${item.id}" data-name="${item.name}">削除</button></div>
-            <div class="card__pulldown"></div>
+            <div class="card__delete"><button class="js-delete-btn" data-id="${item.id}" data-name="${item.name}"><img src="./assets/images/trash-icon.svg"></button></div>
+            <div class="card__menu"><button class="js-edit-btn">⋯</button></div>
+            <div class="card__pulldown"><img src="./assets/images/pulldown-icon.svg"></div>
           </div>
-          
+
+
           ${noteHTML}
         </div>
       `;
