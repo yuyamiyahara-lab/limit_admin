@@ -178,8 +178,8 @@ function attachDeleteEventListeners() {
   
   deleteButtons.forEach(button => {
     button.addEventListener('click', async (event) => {
-      const id = parseInt(event.target.getAttribute('data-id'));
-      const name = event.target.getAttribute('data-name');
+      const id = parseInt(event.currentTarget.getAttribute('data-id'));
+      const name = event.currentTarget.getAttribute('data-name');
 
       const confirmDelete = confirm(`「${name}」をリストから削除してもよろしいですか？`);
       
