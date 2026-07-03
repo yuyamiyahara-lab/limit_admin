@@ -65,10 +65,13 @@ function setupRecipeChatHandler() {
       }
 
       // 5. AIの回答を表示して履歴に追加
-      appendMessage(result.text, 'ai');
+      appendMessage(result.recipe, 'ai');
+      
+      // 次のチャットのために履歴に追加するテキストは、タイトルと本文を結合したものにする
+      const historyText = `${result.recipe.title}\n\n${result.recipe.content}`;
       chatHistory.push({
         role: 'model', // SDKを使う場合、AI側のroleは 'model' にします
-        parts: [{ text: result.text }]
+        parts: [{ text: historyText }]
       });
 
     } catch (error) {
@@ -79,7 +82,7 @@ function setupRecipeChatHandler() {
   });
 
   // --- メッセージを画面に追加する補助関数 ---
-  function appendMessage(text, sender, isLoading = false) {
+  function appendMessage(data, sender, isLoading = false) {
     const messageDiv = document.createElement('div');
     messageDiv.className = `message message--${sender}`; // CSS装飾用クラス
     if (isLoading) {
@@ -88,23 +91,54 @@ function setupRecipeChatHandler() {
     }
 
     if (sender === 'ai' && !isLoading) {
-      // AIからの返答はMarkdownとしてパースしてHTMLに変換
-      messageDiv.innerHTML = marked.parse(text);
+      const { title, content, ingredients } = data;
+
+      // タイトルの表示
+      const titleEl = document.createElement('h3');
+      titleEl.textContent = title;
+      titleEl.style.margin = '0 0 10px 0';
+      messageDiv.appendChild(titleEl);
+
+      // 主要な食材の表示
+      if (ingredients && ingredients.length > 0) {
+        const ingEl = document.createElement('div');
+        ingEl.textContent = `主要な食材: ${ingredients.join(', ')}`;
+        ingEl.style.fontSize = '0.9em';
+        ingEl.style.color = '#666';
+        ingEl.style.marginBottom = '10px';
+        messageDiv.appendChild(ingEl);
+      }
+
+      // レシピ本文の表示
+      const contentEl = document.createElement('div');
+      contentEl.innerHTML = marked.parse(content);
+      messageDiv.appendChild(contentEl);
 
       // 「このレシピを保存する」ボタンを作成
       const saveButton = document.createElement('button');
       saveButton.textContent = 'このレシピを保存する';
       saveButton.className = 'btn-save-recipe'; // スタイル付けのためのクラス
-      saveButton.style.marginTop = '5px'; // ボタンの上に少し余白を追加
-      saveButton.onclick = () => {
-        // とりあえずコンソールにログを出すモック実装
-        console.log('レシピ保存ボタンがクリックされました');
-        alert('レシピの保存機能は現在準備中です。');
+      saveButton.style.marginTop = '10px'; // ボタンの上に少し余白を追加
+      saveButton.onclick = async () => {
+        try {
+          await window.api.addRecipe({
+            title,
+            content,
+            ingredients: JSON.stringify(ingredients)
+          });
+          saveButton.textContent = '保存しました';
+          saveButton.disabled = true;
+          saveButton.style.backgroundColor = '#ccc';
+          saveButton.style.cursor = 'default';
+        } catch (error) {
+          console.error(error);
+          alert('レシピの保存に失敗しました。');
+        }
       };
       messageDiv.appendChild(saveButton);
     } else {
       // ユーザーやシステムメッセージ、ローディング中はそのままテキストとして表示
-      messageDiv.innerText = text;
+      messageDiv.innerText = typeof data === 'string' ? data : JSON.stringify(data);
     }
     chatMessagesArea.appendChild(messageDiv);
     return messageDiv.id;

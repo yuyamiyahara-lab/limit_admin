@@ -102,4 +102,39 @@ export function initDatabase() {
     const info = stmt.run(id);
     return info.changes > 0; // 削除が成功したらtrueを返す
   });
+
+  // 5. レシピテーブルの作成
+  db.exec(`
+    CREATE TABLE IF NOT EXISTS recipes (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      title TEXT NOT NULL,
+      content TEXT NOT NULL,
+      ingredients TEXT,
+      created_at TEXT DEFAULT (datetime('now', 'localtime'))
+    )
+  `);
+
+  // 6. レシピ保存処理
+  ipcMain.handle('add-recipe', (event, data) => {
+    const { title, content, ingredients } = data;
+    const stmt = db.prepare(`
+      INSERT INTO recipes (title, content, ingredients)
+      VALUES (?, ?, ?)
+    `);
+    const info = stmt.run(title, content, ingredients);
+    return info.lastInsertRowid;
+  });
+
+  // 7. レシピ取得処理
+  ipcMain.handle('get-recipes', () => {
+    const stmt = db.prepare('SELECT * FROM recipes ORDER BY created_at DESC');
+    return stmt.all();
+  });
+
+  // 8. レシピ削除処理
+  ipcMain.handle('delete-recipe', (event, id) => {
+    const stmt = db.prepare('DELETE FROM recipes WHERE id = ?');
+    const info = stmt.run(id);
+    return info.changes > 0;
+  });
 }

@@ -70,6 +70,7 @@
     <div class="screen-recipe inactive">
       <div class="screen-recipe__title">
         <h2>レシピ提案</h2>
+        <button class="js-go-to-history-btn">保存したレシピを見る</button>
       </div>
 
       <div class="chat-area">
@@ -219,9 +220,19 @@
           <input type="password" class="screen-settings__input" placeholder="ここにAPIキーを入力">
           <button class="screen-settings__button">保存</button>
         </div>
-
       </div>
     </div>
+
+    <div class="screen-history inactive">
+      <div class="screen-history__title">
+        <h2>保存したレシピ</h2>
+        <button class="js-back-to-recipe-btn">戻る</button>
+      </div>
+      <div class="screen-history__cards">
+        
+      </div>
+    </div>
+    <div class="screen-saved"></div>
   </main>
   <script type="module" src="/src/main.js"></script>
 </body>

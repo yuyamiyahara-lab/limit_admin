@@ -105,7 +105,31 @@ ipcMain.handle('send-recipe-chat', async (event, ingredientsPrompt, chatHistory)
     // 3. モデルを指定
     const model = genAI.getGenerativeModel({ 
       model: 'models/gemini-2.5-flash',
-      systemInstruction: "あなたはプロの料理研究家です。挨拶や前置きは省略し、提示された食材情報に基づいて、すぐに提案する料理の簡単な説明と具体的なレシピを提案してください。"
+      systemInstruction: "あなたはプロの料理研究家です。挨拶や前置きは省略し、提示された食材情報に基づいて、すぐに提案する料理の具体的なレシピを提案してください。",
+      generationConfig: {
+        responseMimeType: "application/json",
+        responseSchema: {
+          type: "object",
+          properties: {
+            title: {
+              type: "string",
+              description: "レシピ名。先頭にその料理を表す絵文字を1から3個含めてください。例: '🍳 ふわとろオムライス', '🍛 チキンカレー'"
+            },
+            content: {
+              type: "string",
+              description: "具体的なレシピの本文（Markdown形式）。材料一覧や作り方の手順を含めてください。挨拶や前置きは含めないでください。"
+            },
+            ingredients: {
+              type: "array",
+              items: {
+                type: "string"
+              },
+              description: "このレシピに必要な主な食材のリスト。塩、醤油、砂糖、みりん、味噌、油などの一般的な調味料や、小麦粉、片栗粉、パン粉などの粉類は除外してください。例: ['鶏もも肉', '玉ねぎ', '卵']"
+            }
+          },
+          required: ["title", "content", "ingredients"]
+        }
+      }
     });
 
     // 画面から受け取った「現在の食材リスト」を会話の先頭に追加
@@ -118,9 +142,10 @@ ipcMain.handle('send-recipe-chat', async (event, ingredientsPrompt, chatHistory)
     const result = await model.generateContent({ contents: fullHistory });
     const response = result.response;
 
-    // 5. AIのテキストだけを画面に返す
+    // 5. AIのテキストをパースして画面に返す
     const text = response.text();
-    return { success: true, text: text };
+    const recipe = JSON.parse(text);
+    return { success: true, recipe: recipe };
 
   } catch (error) {
     console.error('Gemini Error:', error);
