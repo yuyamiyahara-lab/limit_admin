@@ -195,6 +195,8 @@ function setupFrequentEditHandler() {
   const editBtn = document.querySelector('.screen-add__frequent-edit');
   if (!editBtn) return;
 
+  const container = document.getElementById('frequent-items-container');
+
   const editingTextSpan = document.createElement('span');
   editingTextSpan.textContent = '編集中';
   editingTextSpan.style.display = 'none';
@@ -207,12 +209,18 @@ function setupFrequentEditHandler() {
   editBtn.addEventListener('click', () => {
     isEditingFrequent = !isEditingFrequent;
 
+
     if (isEditingFrequent) {
       editBtn.textContent = '完了';
       editingTextSpan.style.display = 'inline';
+
+      if (container) container.classList.add('is-editing');
+
     } else {
       editBtn.textContent = '編集';
       editingTextSpan.style.display = 'none';
+
+      if (container) container.classList.remove('is-editing');
     }
   });
 }

@@ -1,1 +1,299 @@
 @use 'variables';
+@use "sass:color";
+
+.screen-add {  
+    color: #556B2F;
+    font-weight: 700;
+
+
+    &.active {
+        display: block;
+    }
+
+    &.inactive {
+        display: none;
+    }
+
+
+    &__title {
+        margin: 30px 375px 30px 55px;
+
+        h2 {
+            font-size: 24px;
+        }
+    }
+
+    &__frequent {
+        margin: 0px 55px 30px 55px;
+    }
+
+
+    &__frequent--meta {
+        display: flex;
+        justify-content: space-between; 
+        margin-bottom: 12px;
+
+        h3 {
+            margin: 0;
+            font-size: 16px;
+            color: #444444;
+        }
+
+        button {
+            margin: 0;
+            font-size: 16px;    
+            color: #666666;    
+
+            &:hover {
+                color: #333333;
+                text-decoration: underline; // リンク風に下線を出すとおしゃれです
+            }
+        }
+    }
+
+    &__frequent-items {
+        button {
+            padding: 4px 10px 4px 10px;
+            background-color: #E8F2D8;
+            font-size: 14px;
+            border-radius: 20px;
+            margin-right: 10px;
+            margin-bottom: 10px;
+
+            &:hover {
+                background-color: #556B2F;
+                color: #FCFCFC;
+            }
+        }
+
+
+    }
+
+    #frequent-items-container.is-editing {
+        .frequent-item-btn {
+            position: relative;
+            padding: 4px 10px 4px 10px;
+            background-color: #E8F2D8;
+            font-size: 14px;
+            border-radius: 20px;
+            margin-right: 10px;
+            margin-bottom: 10px;
+            overflow: hidden;
+            transition: all 0.2s ease;
+
+            &::after {
+                content: "";
+                position: absolute;
+                
+                // 縦横の完璧な中央揃え
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                
+                // 提供されたSVGの本来のサイズ（width="16" height="20"）に指定
+                width: 16px;
+                height: 20px;
+                
+                // ここがポイント！】提供されたSVGコードを埋め込み（色を白に変更済み）
+                background-image: url("data:image/svg+xml;charset=utf8,%3Csvg width='16' height='20' viewBox='0 0 16 20' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1.29925 18.1536C1.39159 19.1987 2.26698 20 3.31644 20H12.3603C13.4094 20 14.2851 19.1987 14.3775 18.1536L15.3792 5.03137H0.297607L1.29925 18.1536ZM10.6973 8.66547C10.7112 8.43594 10.9082 8.26122 11.1378 8.27516C11.3673 8.28911 11.5417 8.48645 11.5281 8.71567L11.1325 16.6154C11.1185 16.845 10.9215 17.0194 10.6919 17.0054C10.4624 16.9918 10.2876 16.7945 10.3016 16.5652L10.6973 8.66547ZM7.42229 8.6904C7.42229 8.46051 7.6087 8.27446 7.83858 8.27446C8.06847 8.27446 8.25483 8.46051 8.25483 8.6904V16.5905C8.25483 16.8204 8.06847 17.0064 7.83858 17.0064C7.6087 17.0064 7.42229 16.8204 7.42229 16.5905V8.6904ZM4.53897 8.27516C4.76851 8.26122 4.96554 8.43594 4.97952 8.66547L5.3755 16.5652C5.38944 16.7945 5.21472 16.9918 4.98519 17.0054C4.75593 17.0194 4.55858 16.845 4.54464 16.6154L4.14866 8.71567C4.13472 8.48645 4.3094 8.28911 4.53897 8.27516Z' fill='%23DF5656'/%3E%3Cpath d='M14.9915 2.5202C14.9915 2.5202 13.6604 2.29895 13.2986 2.18898C12.9743 2.09031 10.1425 1.65906 10.1425 1.65906L10.0362 0.905273C9.96313 0.385039 9.53719 0 9.03555 0H7.83824H6.64094C6.13996 0 5.71406 0.385039 5.64031 0.905273L5.53402 1.65906C5.53402 1.65906 2.7032 2.09027 2.37863 2.18898C2.01688 2.29895 0.685 2.5202 0.685 2.5202C0.281719 2.63145 0 3.01453 0 3.45234V4.30883H7.83828H15.6772V3.45234C15.6772 3.01453 15.3955 2.63145 14.9915 2.5202ZM8.63227 1.51656H7.04492C6.90406 1.51656 6.78977 1.4023 6.78977 1.26141C6.78977 1.12051 6.90406 1.00625 7.04492 1.00625H8.63227C8.77312 1.00625 8.88742 1.12051 8.88742 1.26141C8.88742 1.4023 8.77312 1.51656 8.63227 1.51656Z' fill='%23DF5656'/%3E%3C/svg%3E");
+                background-repeat: no-repeat;
+                background-position: center;
+                background-size: contain;
+                
+                opacity: 0;               
+                z-index: 2;               
+                transition: opacity 0.2s ease;
+            }
+
+
+
+            &:hover {
+                color: #FCFCFC;
+                transform: scale(1.03);    // ほんの少しだけボタンを大きくして緊張感を出す
+                &::after {
+                    opacity: 1;             // 前面のSVGをクッキリ表示させる！
+                }
+            }
+        }
+    }
+
+    .form {
+        font-size: 16px;
+        &__container, &__container--frequent {
+            margin: 0px 55px 30px 55px;
+            background-color: #FCFCFC;
+            border-radius: 8px;     // 角丸
+
+            padding-top: 22px; 
+            padding-bottom: 27px; // 下側も同様に枠の内側余白にするのが綺麗です
+        }
+
+        &__group--full {
+            display: flex;
+            flex-direction: column; // 中身（labelとinput）を縦並びにする
+            gap: 7px;               // 「食材名」の文字と入力欄の間の隙間（Figmaの数値に合わせて変更してください）
+            margin: 0px 22px 16px 22px;    
+
+
+            .label{
+                margin: 0;
+            }
+
+            input, textarea{
+                width: 100%;            // 横幅を画面（親要素）いっぱいに広げる
+                padding: 10px 12px;     // 入力欄の内側の余白
+                font-size: 1rem;
+                border: 1px solid #999999;
+                border-radius: 6px;     // 角丸
+                background-color: #FCFCFC;
+                box-sizing: border-box;
+            }
+        }
+    }
+
+    .form--row {
+        display: flex;
+        align-items: flex-end; // 入力欄の下のラインを綺麗に揃える（重要！）
+        gap: 12px;
+        margin: 0px 22px 16px 22px;  
+
+
+        .form__group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+
+
+            // 1番目（量）の塊
+            &:nth-child(1) {
+                width: 60px;
+                flex-shrink: 0; // 量は絶対に縮ませない
+            }
+
+            // 2番目（単位）の塊
+            &:nth-child(2) {
+                width: 60px;
+                flex-shrink: 0; // 単位も絶対に縮ませない
+            }
+
+            // 3番目（期限の動的パーツ）の塊
+            &:nth-child(3) {
+                // 幅を指定せず、flex-basis: 0 と flex-grow/shrink を組み合わせることで、
+                // 「余ったスペースを使いつつ、狭いときは限界まで縮む」という柔軟な幅になります！
+                flex-grow: 1;    
+                flex-shrink: 1;  
+                flex-basis: 0;   // これを入れると、期限自体の元々の長さを無視してくれます
+                min-width: 0;    // ブラウザの「これ以上縮めない」というブレーキを解除する
+            }
+
+            // 4番目（賞味・消費のセレクト）の塊
+            &:nth-child(4) {
+                width: 110px;
+                flex-shrink: 0; // セレクトボックスも絶対に縮ませない（ハミ出しも防ぐ）
+            }
+
+
+            // 「量」や「単位」など、それぞれの入力欄
+            input, select {
+                font-weight: 400; 
+                font-weight: normal;
+                font-size: 16px;
+                color: #444444;
+                width: 100%;
+                padding: 10px 12px;
+                border: 1px solid #999999;
+                border-radius: 6px;
+                background-color: #FCFCFC;
+                box-sizing: border-box;
+            }
+
+        }
+    }
+
+    .form__submit {
+        width: 396px;
+        height: 40px;
+        margin: 4px 22px 0 22px;
+        background-color: #556B2F;
+        color: #FCFCFC;
+        border-radius: 6px;
+
+        &:hover {
+           background-color: color.adjust(#556B2F, $lightness: 7%);
+        }
+    }
+
+    .form__cancel {
+        width: 396px;  // 登録ボタンと横幅・高さを合わせると綺麗です
+        height: 40px;
+
+        margin: 16px 22px 0 22px;
+        
+        
+        // 背景は透明にして、枠線と文字を落ち着いたグレーにする
+        background-color: transparent;
+        color: #64748b; 
+        border: 1px solid #cbd5e1; // 薄いグレーの枠線
+        border-radius: 6px;
+        cursor: pointer;
+        
+        // なめらかに変化させるアニメーション
+        transition: background-color 0.2s ease, color 0.2s ease;
+
+        // マウスを乗せた（ホバー）ときの演出
+        &:hover {
+            background-color: #f1f5f9; // うっすらグレーの背景がつく
+            color: #334155;            // 文字色が少し濃くなる
+        }
+    }
+
+    .mini-food-list {
+        margin: 0 55px 5px 55px;
+
+        &__title {
+            margin-bottom: 8px;
+            color: #444444;
+            font-size: 16px;
+        }
+
+        &__items {
+            display: flex;
+            flex-direction: column; // カード自体は縦に積み重ねる
+            gap: 8px;
+
+            .card{
+                display: flex;          // ✨ 中身（name, amount, deadline）を横一列に並べる
+                align-items: center;    // 上下の高さを中央で綺麗に揃える
+                height: 30px;
+                border: 1px solid #7A8D3F;
+                border-radius: 8px;     // 角丸
+                background-color: #FCFCFC;
+                box-sizing: border-box;
+
+                // 1. 食材の名前（左側に配置して、余ったスペースを広げる）
+                &__name {
+                    margin-left: 22px;
+                    flex-grow: 1;         // 名前エリアを一番長く伸ばして、数量と期限を右側に押し出す
+                    font-size: 16px;
+                    color: #444444;
+                }
+
+                // 2. 数量（真ん中右寄り）
+                &__amount {
+                    font-size: 16px;
+                    color: #444444;
+                    margin-right: 20px;   // 右隣の期限との間のスキマ（Figmaに合わせて調整してください）
+                }
+
+                // 3. 期限（右端）
+                &__deadline {
+                    margin-right: 31px;
+                    font-size: 14px;
+                    font-weight: 500;
+                    color: #666666 // 期限切れが目立つように少し赤みを持たせるのがオススメ
+                }
+            }
+        }
+    }
+}
+
