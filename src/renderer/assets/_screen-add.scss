@@ -149,6 +149,11 @@
                 background-color: #FCFCFC;
                 box-sizing: border-box;
             }
+
+            textarea {
+                resize: none;       // つまんでリサイズするのを完全に禁止する
+                height: 100px;      // 💡 Figmaのデザインに合わせて、デフォルトの高さ（例: 100px）をカチッと固定しておきます
+            }
         }
     }
 
