@@ -37,24 +37,26 @@ async function renderManageFoodList(sortBy = 'deadline') {
         daysLeftText = `あと${diffDays}日`;
       }
 
-      const noteHTML = item.remarks ? `<div class="card__note">${item.remarks}</div>` : '';
+      const noteHTML = item.remarks ? `<div class="card__note"><div class='card__notetitle'>備考</div>${item.remarks}</div>`
+                                      : `<div class="card__note"><div class='card__notetitle'>備考</div></div>`;
       const itemDataJson = JSON.stringify(item).replace(/"/g, '&quot;');
 
       const cardHTML = `
-        <div class="card" id="card-${item.id}" data-item="${itemDataJson}">
-          <div class="card__meta">
-            <div class="card__name">${item.name}</div>
-            <div class="card__deadline">${item.type}: ${item.deadline}</div>
+        <div class="card__wrap">
+          <div class="card" id="card-${item.id}" data-item="${itemDataJson}">
+            <div class="card__meta">
+              <div class="card__name">${item.name}</div>
+              <div class="card__deadline">${item.type}: ${item.deadline}</div>
+            </div>
+            <div class="card__amount">${item.amount}${item.unit}</div>
+            
+            <div class="card__actions">
+              <div class="card__delete"><button class="js-delete-btn" data-id="${item.id}" data-name="${item.name}"><img src="./assets/images/trash-icon.svg"></button></div>
+              <div class="card__menu"><button class="js-edit-btn">⋯</button></div>
+              <div class="card__pulldown"><button class="js-pulldown-btn"><img src="./assets/images/pulldown-icon.svg"></button></div>
+            </div>
           </div>
-          <div class="card__amount">${item.amount}${item.unit}</div>
           
-          <div class="card__actions">
-            <div class="card__delete"><button class="js-delete-btn" data-id="${item.id}" data-name="${item.name}"><img src="./assets/images/trash-icon.svg"></button></div>
-            <div class="card__menu"><button class="js-edit-btn">⋯</button></div>
-            <div class="card__pulldown"><img src="./assets/images/pulldown-icon.svg"></div>
-          </div>
-
-
           ${noteHTML}
         </div>
       `;
@@ -65,8 +67,11 @@ async function renderManageFoodList(sortBy = 'deadline') {
     // 編集ボタンのイベント
     attachEditEventListeners();
     
-    // 削除ボタンのイベントを設定する
+    // 削除ボタンのイベント
     attachDeleteEventListeners();
+
+    // プルダウンボタンのイベント
+    attachPulldownEventListeners();
 
   } catch (error) {
     console.error('管理画面のデータ取得に失敗しました:', error);
@@ -200,6 +205,19 @@ function attachDeleteEventListeners() {
           alert('削除に失敗しました。');
         }
       }
+    });
+  });
+}
+
+// プルダウンボタンのクリックを監視する関数
+function attachPulldownEventListeners() {
+  const pulldownButtons = document.querySelectorAll('.js-pulldown-btn');
+  
+  pulldownButtons.forEach(button => {
+    button.addEventListener('click', async (event) => {
+      const wrap = event.currentTarget.closest('.card__wrap');
+      const note = wrap.querySelector('.card__note');
+      note.classList.toggle('open');
     });
   });
 }

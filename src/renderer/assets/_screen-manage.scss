@@ -17,9 +17,15 @@
 .food-list {
     &__items{
         .card {
+            &__wrap {
+                background-color: #EEEEEE;
+                border-radius: $radius-md;
+                box-shadow: $shadow-lg;
+                margin: 15px 50px;
+            }
+
             position: relative;
             background-color: $bg-surface;
-            margin: 15px 50px;
             border-radius: $radius-md;
             box-shadow: $shadow-lg;
             align-items: center;
@@ -27,20 +33,21 @@
             flex-direction: row;
             padding: 10px 30px;
             gap: 50px;
-    
+
             &__name {
                 color: $text-main;
-                font-size: 18px;
+                font-size: 16px;
                 font-weight: 500;
             }
             &__deadline {
                 color: $text-muted;
+                font-size: 14px;
                 font-weight: 300;
             }
 
             &__amount {
                 color: $text-main;
-                font-size: 18px;
+                font-size: 16px;
                 font-weight: 500;
             }
             
@@ -50,14 +57,32 @@
                 margin-left: auto;
                 font-size: 27px;
                 
-                gap: 8px;
+                gap: 10px;
                 .js-edit-btn {
                     color: $text-muted;
                 }
             }
     
             &__note {
-                display: none;
+                max-height: 0;
+                overflow: hidden;
+                visibility: hidden;
+                &.open {
+                    padding: 10px 30px;
+                    max-height: 200px;
+                    word-break: auto-phrase;
+                    overflow-wrap: anywhere;
+                    overflow-y: auto;
+                    visibility: visible;
+                    color: $text-main;
+                    font-size: 16px;
+                    font-weight: 300;
+                }
+                &title {
+                    color: $text-main;
+                    font-size: 16px;
+                    font-weight: 500;
+                }
             }
 
             &::after {
@@ -79,6 +104,9 @@
     flex-direction: column;
     gap: 10px;
     color: $primary-color;
+    font-size: 16px;
+    font-weight: 500;
+
     select {
         height: 35px;
     }
