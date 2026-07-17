@@ -13,6 +13,15 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
+// 表示順の更新を監視
+const select = document.getElementById('manage-sort-order');
+if (select) {
+  select.addEventListener('change', (event) => {
+    const currentSort = event.target?.value || 'deadline';
+    renderManageFoodList(currentSort);
+  });
+}
+
 // 管理画面のリスト描画関数
 async function renderManageFoodList(sortBy = 'deadline') {
   const container = document.getElementById('manage-food-list');
