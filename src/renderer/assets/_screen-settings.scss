@@ -1,0 +1,19 @@
+@use "variables" as *;
+
+.screen-settings {
+    padding: 30px 45px;
+    color: $text-main;
+
+    &__title {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        h2 {
+            font-size: 24px;
+            font-weight: bold;
+            color: $primary-color;
+        }
+    }
+
+}
