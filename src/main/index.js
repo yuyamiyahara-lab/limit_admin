@@ -104,7 +104,7 @@ ipcMain.handle('send-recipe-chat', async (event, ingredientsPrompt, chatHistory)
     
     // 3. モデルを指定
     const model = genAI.getGenerativeModel({ 
-      model: 'models/gemini-1.5-flash',
+      model: 'gemini-1.5-flash',
       systemInstruction: "あなたはプロの料理研究家です。挨拶や前置きは省略し、提示された食材情報に基づいて、すぐに提案する料理の具体的なレシピを提案してください。",
       generationConfig: {
         responseMimeType: "application/json",
