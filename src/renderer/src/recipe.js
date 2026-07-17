@@ -59,7 +59,7 @@ function setupRecipeChatHandler() {
         } else if (result.error === 'API_KEY_INVALID') {
           appendMessage('APIキーが正しくありません。設定画面から正しいキーを保存してください。', 'system');
         } else {
-          appendMessage('エラーが発生しました。時間を置いて試すか、APIキーを確認してください。', 'system');
+          appendMessage(`エラーが発生しました: ${result.error}\n時間を置いて試すか、APIキーを確認してください。`, 'system');
         }
         return;
       }
