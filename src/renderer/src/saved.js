@@ -1,4 +1,6 @@
 import { marked } from 'marked';
+import deleteIcon from '../assets/images/delete-icon.svg?url';
+
 
 document.addEventListener('DOMContentLoaded', () => {
   setupSavedHandlers();
@@ -76,7 +78,10 @@ async function renderSavedRecipes() {
 
       // 削除ボタン
       const deleteBtn = document.createElement('button');
-      deleteBtn.textContent = '削除';
+      const deleteIconImg = document.createElement('img');
+      deleteIconImg.src = deleteIcon;
+      deleteIconImg.alt = '削除';
+      deleteBtn.appendChild(deleteIconImg);
       deleteBtn.onclick = async (event) => {
         event.stopPropagation(); // 詳細画面への遷移を防ぐ
         const confirmDelete = confirm(`「${recipe.title}」を削除してもよろしいですか？`);
