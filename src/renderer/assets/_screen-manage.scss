@@ -92,8 +92,15 @@
                 width: 100%;
                 height: 100%;
                 border-radius: $radius-md;
-                background-color: $status-neutral;  // 色分けが未実装(-alert,-warning,-neutral)
+                background-color: $status-neutral;
                 z-index: -1;
+            }
+
+            &.is_alert::after {
+                background-color: $status-alert;
+            }
+            &.is_warning::after {
+                background-color: $status-warning;
             }
         }
     }

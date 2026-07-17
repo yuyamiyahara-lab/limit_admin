@@ -62,6 +62,18 @@ async function renderManageFoodList(sortBy = 'deadline') {
       `;
 
       container.insertAdjacentHTML('beforeend', cardHTML);
+
+      const card = container.lastElementChild.querySelector('.card');
+
+      if (diffDays <= 3) {
+        card.classList.remove('is_warning');
+        card.classList.add('is_alert');
+      } else if (diffDays <= 7) {
+        card.classList.remove('is_alert');
+        card.classList.add('is_warning');
+      } else {
+        card.classList.remove('is_alert', 'is_warning');
+      }
     });
 
     // 編集ボタンのイベント
