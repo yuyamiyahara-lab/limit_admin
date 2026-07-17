@@ -1,0 +1,112 @@
+@use 'variables' as *;
+
+.screen-saved-list {
+    padding: 30px 45px;
+
+    &__title {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        h2 {
+            font-size: 24px;
+            font-weight: bold;
+            color: $primary-color;
+        }
+
+        button {
+            font-size: 16px;
+            color: $text-muted;
+            font-weight: bold;
+        }
+    }
+
+    &__cards {
+        display: flex;
+        flex-flow: wrap;
+        gap: 25px 20px;
+        margin-top: 30px;
+    }
+
+    .saved-card {
+        width: 220px;
+        background-color: $bg-surface;
+        border-radius: $radius-md;
+        box-shadow: $shadow-sm;
+        padding: 10px 20px;
+
+        h4 {
+            font-weight: bold;
+            color: $primary-color;
+        }
+
+        &__meta {
+            display: flex;
+            justify-content: space-between;
+
+            div {
+                font-size: 14px;
+                color: $text-muted;
+            }
+
+            img {
+                width: 16px;
+                height: 16px;
+            }
+        }
+
+        &__ingredients {
+            display: flex;
+            flex-flow: wrap;
+            gap: 4px 8px;
+
+            span {
+                font-size: 14px;
+                color: $text-main;
+                box-sizing: border-box;
+                padding: 2px 6px;
+                border: 1.5px solid $primary-color-light;
+                border-radius: $radius-md;
+                background-color: $bg-modal-header;
+                font-weight: 500;
+                height: 25px;
+                line-height: 18px;
+            }
+        }
+    }
+}
+
+.screen-saved {
+    padding: 30px 45px;
+
+    &__title {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        h2 {
+            font-size: 24px;
+            font-weight: bold;
+            color: $primary-color;
+        }
+
+        button {
+            font-size: 16px;
+            color: $text-muted;
+            font-weight: bold;
+        }
+    }
+
+    &__content {
+        background-color: $bg-surface;
+        border-radius: $radius-md;
+        box-shadow: $shadow-sm;
+        padding: 10px 20px;
+        margin-top: 20px;
+        color: $text-main;
+        
+        h2, h3, h4 {
+            color: $primary-color;
+        }
+    }
+}

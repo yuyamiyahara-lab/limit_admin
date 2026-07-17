@@ -70,7 +70,7 @@
     <div class="screen-recipe inactive">
       <div class="screen-recipe__title">
         <h2>レシピ提案</h2>
-        <button class="js-go-to-history-btn">保存したレシピを見る</button>
+        <button class="js-go-to-saved-btn">保存したレシピを見る</button>
       </div>
 
       <div class="chat-area">
@@ -82,7 +82,7 @@
           </div>
         </div>
         <form class="chat-area__input js-recipe-form">
-          <textarea class="js-recipe-input" placeholder="食材や気分を入力してください"></textarea>
+          <textarea class="js-recipe-input" placeholder="食材や気分を入力してください" style="user-select: text; -webkit-user-select: text;"></textarea>
           <button type="submit" class="chat-area__submit">送信</button>
         </form>
       </div>
@@ -219,22 +219,36 @@
         <h3>apiキー</h3>
         
         <div class="screen-settings__form-group">
-          <input type="password" class="screen-settings__input" placeholder="ここにAPIキーを入力">
+          <input type="password" class="screen-settings__input" placeholder="ここにAPIキーを入力" style="user-select: text; -webkit-user-select: text;">
           <button class="screen-settings__button">保存</button>
         </div>
+        <p style="margin-top: 10px; font-size: 14px; color: #666; user-select: text; -webkit-user-select: text;">
+          APIキーをお持ちでない場合は、<a href="https://aistudio.google.com/" target="_blank">Google AI Studio</a> から取得してください。
+        </p>
       </div>
     </div>
 
-    <div class="screen-history inactive">
-      <div class="screen-history__title">
+    <div class="screen-saved-list inactive">
+      <div class="screen-saved-list__title">
         <h2>保存したレシピ</h2>
         <button class="js-back-to-recipe-btn">戻る</button>
       </div>
-      <div class="screen-history__cards">
+      <div class="screen-saved-list__cards">
         
       </div>
     </div>
-    <div class="screen-saved"></div>
+    <div class="screen-saved inactive">
+      <div class="screen-saved__title">
+        <h2>レシピ詳細</h2>
+        <button class="js-back-to-saved-list-btn">戻る</button>
+      </div>
+      <div class="screen-saved__content">
+        <h3 class="js-saved-recipe-title"></h3>
+        <div class="js-saved-recipe-date"></div>
+        <div class="js-saved-recipe-ingredients"></div>
+        <div class="js-saved-recipe-body"></div>
+      </div>
+    </div>
   </main>
   <script type="module" src="/src/main.js"></script>
 </body>
