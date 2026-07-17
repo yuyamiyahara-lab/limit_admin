@@ -23,7 +23,7 @@ if (select) {
 }
 
 // 管理画面のリスト描画関数
-async function renderManageFoodList(sortBy = 'deadline') {
+export async function renderManageFoodList(sortBy = 'deadline') {
   const container = document.getElementById('manage-food-list');
   if (!container) return;
 
