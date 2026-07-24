@@ -1,4 +1,4 @@
-@use 'variables';
+@use 'variables' as *;
 
 .summary {
     display: flex;
@@ -34,19 +34,201 @@
 }
 
 .screen-home {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
     height: 100%;
     padding: 30px 55px;
 
 }
 
-.foodlist{
-    &__title{
-        font-size: 20px;
-        font-weight: bold;
-        color: #556B2F;
-        margin-bottom: 10px;
+.food-list {
+
+    width: 100%;
+    
+    margin-top: 30px;
+   
+  
+    box-sizing: border-box;
+  
+    &__title {
+        display: inline-block; 
+      margin: 0 0 30px;
+  
+      color: #556B2F;
+  
+      font-size: 20px;
+  
+      font-weight: 600;
+      
+      border-bottom: 2px solid #556B2F;
     }
-}
+  
+    &__items {
+  
+      display: flex;
+  
+      flex-direction: column;
+  
+      gap: 16px;
+  
+    }
+  
+  }
+
+
+  .card {
+
+    // 初期状態はニュートラル
+    padding: 10px 25px 10px 30px; 
+
+    --status-color: #{#999999};
+  
+    --status-bg: #{$status-neutral-bg};
+  
+    position: relative;
+  
+    display: flex;
+  
+    align-items: center;
+  
+    gap: 0;
+  
+    width: 100%;
+    
+    margin-left: 5px;
+  
+    background-color: $bg-surface;
+  
+    border-radius: $radius-md;
+  
+    box-shadow: $shadow-lg;
+  
+    box-sizing: border-box;
+  
+    transition: $transition;
+  
+    // 左側のステータスライン
+  
+    &::before {
+  
+      content: "";
+  
+      position: absolute;
+  
+      top: 0;
+  
+      bottom: 0;
+  
+      left: -5px;
+  
+      width: 14px;
+  
+      background-color: $status-neutral-bg;
+  
+      border-radius: $radius-md 0 0 $radius-md;
+  
+      z-index: -1;
+  
+    }
+  
+  
+  
+    &__meta {
+      width: 160px;
+  
+  
+    }
+  
+    &__name {
+  
+      margin-bottom: 8px;
+  
+      color: $text-main;
+  
+      font-size: 16px;
+  
+      font-weight: 700;
+  
+  
+    }
+  
+    &__deadline {
+  
+      color: $text-muted;
+  
+      font-size: 14px;
+  
+      font-weight: 400;
+  
+      line-height: 1.4;
+  
+      white-space: nowrap;
+  
+    }
+  
+    &__amount {
+  
+      color: $text-main;
+  
+      font-size: 16px;
+  
+      font-weight: 700;
+  
+      text-align: center;
+  
+      white-space: nowrap;
+
+      width: 140px;
+  
+    }
+  
+    &__days-left {  
+   
+  
+      color: var(--status-color);
+  
+      background-color: var(--status-bg);
+  
+      border-radius: 50px;
+  
+      font-size: 14px;
+  
+      font-weight: 500;
+  
+      line-height: 1.2;
+  
+      text-align: center;
+  
+      white-space: nowrap;
+  
+      box-sizing: border-box;
+  
+      transition: $transition;
+
+      width: fit-content;
+
+      padding: 4px 15px;
+  
+    }
+
+    &__deadline--warning {
+        &::before {
+            background-color: #E67E22;
+        }
+
+        .card__days-left {
+            color: #E67E22;
+            background-color: #F2D0B2;
+        }
+    }
+
+    &__deadline--caution {
+        &::before {
+            background-color: #F1C40F;
+        }
+        .card__days-left {
+            color: #F1C40F;
+            background-color: #F8EEC7;
+        }
+    }
+
+
+} 

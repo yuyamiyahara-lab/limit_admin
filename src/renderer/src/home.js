@@ -37,20 +37,29 @@ export async function renderHomeFoodList() {
 
       // 残り日数の表示テキスト
       let daysLeftText = '';
+      let statusClass = '';
       if (diffDays < 0) {
         daysLeftText = `${Math.abs(diffDays)}日超過`;
       } else {
         daysLeftText = `あと${diffDays}日`;
       }
 
+      if (diffDays <= 3) {
+        statusClass = 'card__deadline--warning';
+      } else if (diffDays <= 7) {
+        statusClass = 'card__deadline--caution';
+      } else {
+        statusClass = 'card__deadline--normal';
+      }
+
       const cardHTML = `
-        <div class="card">
+        <div class="card ${statusClass}">
           <div class="card__meta">
             <div class="card__name">${item.name}</div>
             <div class="card__deadline">${item.type}: ${item.deadline}</div>
           </div>
           <div class="card__amount">${item.amount}${item.unit}</div>
-          <div class="card__days-left">${daysLeftText}</div>
+          <div class="card__days-left ${statusClass}">${daysLeftText}</div>
         </div>
       `;
 
