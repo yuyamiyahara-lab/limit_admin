@@ -102,6 +102,24 @@ ipcMain.handle('send-recipe-chat', async (event, ingredientsPrompt, chatHistory)
     }
     if (!apiKey) throw new Error('API_KEY_NOT_FOUND');
 
+    // 【一時デバッグ】利用可能なモデルをREST APIで取得してコンソールに出力
+    try {
+      const listUrl = `https://generativelanguage.googleapis.com/v1/models?key=${apiKey}`;
+      const listResponse = await fetch(listUrl);
+      const listData = await listResponse.json();
+      if (listData.models) {
+        console.log("[Main Process] === Available Models for this API Key ===");
+        listData.models.forEach(m => {
+          console.log(`  - ${m.name} (methods: ${m.supportedGenerationMethods.join(', ')})`);
+        });
+        console.log("[Main Process] ========================================");
+      } else {
+        console.log("[Main Process] Failed to list models, response:", listData);
+      }
+    } catch (e) {
+      console.error("[Main Process] Error listing models:", e);
+    }
+
     // 2. 使用するモデル名をデバッグログに出力
     const targetModel = 'gemini-1.5-flash';
     console.log(`[Main Process] Requesting chat with model: ${targetModel}`);
