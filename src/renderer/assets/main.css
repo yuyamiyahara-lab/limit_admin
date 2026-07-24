@@ -1,0 +1,291 @@
+@charset "UTF-8";
+@font-face {
+  font-family: "NotoSansJP";
+  src: url("./fonts/NotoSansJP-VariableFont_wght.ttf");
+  font-weight: 100 900;
+  font-style: normal;
+}
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "NotoSansJP", "Segoe UI", Meiryo, system-ui, sans-serif;
+  background-color: #f5f5f5;
+  color: #333;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+}
+
+button {
+  background: transparent;
+  border: none;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  outline: none;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+}
+
+body {
+  display: flex;
+  height: 100vh;
+  margin: 0;
+  overflow: hidden;
+}
+
+.sidebar {
+  background-color: #556B2F;
+  width: 250px;
+  flex-shrink: 0;
+  height: 100%;
+}
+
+.main {
+  background-color: #F5F5DC;
+  flex-grow: 1;
+  height: 100%;
+}
+
+.inactive {
+  display: none;
+}
+
+.active {
+  display: block;
+}
+
+.sidebar__wrap {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 72px;
+  padding: 80px 0;
+}
+.sidebar__title {
+  align-items: center;
+  color: #F5F5DC;
+  display: flex;
+  font-size: 30px;
+  font-weight: bold;
+  gap: 4px;
+}
+.sidebar__title img {
+  height: 48px;
+  width: 48px;
+}
+.sidebar__nav {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.sidebar__nav-btn {
+  align-items: center;
+  border: 2px solid #9BA786;
+  border-radius: 8px;
+  color: #F5F5DC;
+  display: flex;
+  font-size: 20px;
+  font-weight: 500;
+  gap: 10px;
+  height: 44px;
+  transition: all 0.3s 0s ease;
+  width: 200px;
+}
+.sidebar__nav-btn:hover {
+  background-color: #738E45;
+  border-color: #D9E2C9;
+}
+.sidebar__nav-btn img {
+  height: 30px;
+  margin-left: 20px;
+  width: 30px;
+}
+.sidebar__nav-btn.active {
+  background-color: #7A8D3F;
+  border: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
+  cursor: default;
+}
+.sidebar__control {
+  display: flex;
+}
+.sidebar__control button {
+  display: block;
+}
+
+/* --- 右半分（550px × 600px）のスタイル --- */
+.screen-recipe {
+  width: 550px;
+  height: 600px;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  box-sizing: border-box;
+}
+.screen-recipe.inactive {
+  display: none;
+}
+.screen-recipe {
+  /* 1. タイトルエリア */
+}
+.screen-recipe__title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.screen-recipe__title h2 {
+  color: #556B2F;
+  font-size: 1.5rem;
+  margin: 0;
+}
+.screen-recipe__title .js-go-to-history-btn {
+  background-color: #556B2F;
+  border: 1px solid #556B2F;
+  color: #FCFCFC;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.screen-recipe__title .js-go-to-history-btn:hover {
+  opacity: 0.9;
+}
+.screen-recipe {
+  /* 2. チャット全体を囲む白枠 */
+}
+.screen-recipe .chat-area {
+  background-color: #FCFCFC;
+  border-radius: 12px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  /* スクロールを内包するラッパー（SimpleBar用） */
+}
+.screen-recipe .chat-area__wrap {
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 5px;
+  margin-bottom: 15px;
+}
+.screen-recipe .chat-area {
+  /* ▼ HTML構造に合わせたメッセージコンテナ ▼ */
+}
+.screen-recipe .chat-area .js-recipe-messages {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  /* ① AI側のメッセージ */
+  /* ① AI側のメッセージ */
+}
+.screen-recipe .chat-area .js-recipe-messages .chat-area__message--ai {
+  display: flex;
+  justify-content: flex-start;
+}
+.screen-recipe .chat-area .js-recipe-messages .chat-area__message--ai p, .screen-recipe .chat-area .js-recipe-messages .chat-area__message--ai > div {
+  max-width: 90%;
+  background-color: #F8F5EE;
+  border: 1px solid #eeeeee;
+  padding: 12px 16px;
+  /* ▼ ここを変更（左上だけ 0 にする） ▼ */
+  border-radius: 0 8px 8px 8px;
+  line-height: 1.5;
+  font-size: 0.9rem;
+  color: #444444;
+  margin: 0;
+}
+.screen-recipe .chat-area .js-recipe-messages {
+  /* ② ユーザー側のメッセージ */
+  /* ② ユーザー側のメッセージ */
+}
+.screen-recipe .chat-area .js-recipe-messages .message--user {
+  display: flex;
+  justify-content: flex-end;
+  align-self: flex-end;
+  max-width: 90%;
+  background-color: #E8F2D8;
+  padding: 12px 16px;
+  /* ▼ ここを変更（右上だけ 0 にする） ▼ */
+  border-radius: 8px 0 8px 8px;
+  line-height: 1.5;
+  font-size: 0.9rem;
+  color: #444444;
+  margin: 0;
+  word-break: break-word;
+}
+.screen-recipe .chat-area .js-recipe-messages .message--user p {
+  margin: 0;
+}
+.screen-recipe .chat-area .js-recipe-messages {
+  /* ③ システムメッセージ（エラー表示など） */
+}
+.screen-recipe .chat-area .js-recipe-messages .message--system {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  font-size: 0.85rem;
+  color: #d32f2f;
+  margin: 5px 0;
+}
+.screen-recipe .chat-area {
+  /* ▲ ここまでメッセージエリア ▲ */
+  /* 3. 下部フォームエリア */
+}
+.screen-recipe .chat-area__input {
+  display: flex;
+  gap: 10px;
+  align-items: flex-end;
+  border-top: 1px solid #CCCCCC;
+  margin: 0 -20px;
+  padding: 15px 20px 0 20px;
+}
+.screen-recipe .chat-area__input textarea.js-recipe-input {
+  flex: 1;
+  height: 40px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  background-color: #fafafa;
+  resize: none;
+  font-family: inherit;
+}
+.screen-recipe .chat-area__input textarea.js-recipe-input:focus {
+  outline: none;
+  border-color: #556B2F;
+}
+.screen-recipe .chat-area__input button.chat-area__submit {
+  background-color: #556B2F;
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: opacity 0.2s;
+}
+.screen-recipe .chat-area__input button.chat-area__submit:hover {
+  opacity: 0.9;
+}
+.screen-recipe .chat-area__input button.chat-area__submit img {
+  width: 20px;
+  height: 20px;
+  -o-object-fit: contain;
+     object-fit: contain;
+}/*# sourceMappingURL=main.css.map */
