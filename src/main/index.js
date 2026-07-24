@@ -103,7 +103,7 @@ ipcMain.handle('send-recipe-chat', async (event, ingredientsPrompt, chatHistory)
     if (!apiKey) throw new Error('API_KEY_NOT_FOUND');
 
     // 2. 使用するモデル名をデバッグログに出力
-    const targetModel = 'gemini-2.0-flash';
+    const targetModel = 'gemini-2.0-flash-lite';
     console.log(`[Main Process] Requesting chat with model: ${targetModel}`);
 
     // 3. Gemini APIの初期化
