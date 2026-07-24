@@ -103,41 +103,44 @@ ipcMain.handle('send-recipe-chat', async (event, ingredientsPrompt, chatHistory)
     if (!apiKey) throw new Error('API_KEY_NOT_FOUND');
 
     // 2. 使用するモデル名をデバッグログに出力
-    const targetModel = 'models/gemini-2.5-flash';
+    const targetModel = 'gemini-1.5-flash';
     console.log(`[Main Process] Requesting chat with model: ${targetModel}`);
 
     // 3. Gemini APIの初期化
     const genAI = new GoogleGenerativeAI(apiKey);
     
-    // 4. モデルを指定
-    const model = genAI.getGenerativeModel({ 
-      model: targetModel,
-      systemInstruction: "あなたはプロの料理研究家です。挨拶や前置きは省略し、提示された食材情報に基づいて、すぐに提案する料理の具体的なレシピを提案してください。",
-      generationConfig: {
-        responseMimeType: "application/json",
-        responseSchema: {
-          type: "object",
-          properties: {
-            title: {
-              type: "string",
-              description: "レシピ名。先頭にその料理を表す絵文字を1から3個含めてください。例: '🍳 ふわとろオムライス', '🍛 チキンカレー'"
-            },
-            content: {
-              type: "string",
-              description: "具体的なレシピの本文（Markdown形式）。材料一覧や作り方の手順を含めてください。挨拶や前置きは含めないでください。"
-            },
-            ingredients: {
-              type: "array",
-              items: {
-                type: "string"
+    // 4. モデルを指定 (安定版のv1エンドポイントと大文字スキーマを指定)
+    const model = genAI.getGenerativeModel(
+      { 
+        model: targetModel,
+        systemInstruction: "あなたはプロの料理研究家です。挨拶や前置きは省略し、提示された食材情報に基づいて、すぐに提案する料理の具体的なレシピを提案してください。",
+        generationConfig: {
+          responseMimeType: "application/json",
+          responseSchema: {
+            type: "OBJECT",
+            properties: {
+              title: {
+                type: "STRING",
+                description: "レシピ名。先頭にその料理を表す絵文字を1から3個含めてください。例: '🍳 ふわとろオムライス', '🍛 チキンカレー'"
               },
-              description: "このレシピに必要な主な食材のリスト。塩、醤油、砂糖、みりん、味噌、油などの一般的な調味料や、小麦粉、片栗粉、パン粉などの粉類は除外してください。例: ['鶏もも肉', '玉ねぎ', '卵']"
-            }
-          },
-          required: ["title", "content", "ingredients"]
+              content: {
+                type: "STRING",
+                description: "具体的なレシピの本文（Markdown形式）。材料一覧や作り方の手順を含めてください。挨拶や前置きは含めないでください。"
+              },
+              ingredients: {
+                type: "ARRAY",
+                items: {
+                  type: "STRING"
+                },
+                description: "このレシピに必要な主な食材のリスト。塩、醤油、砂糖、みりん、味噌、油などの一般的な調味料や、小麦粉、片栗粉、パン粉などの粉類は除外してください。例: ['鶏もも肉', '玉ねぎ', '卵']"
+              }
+            },
+            required: ["title", "content", "ingredients"]
+          }
         }
-      }
-    });
+      },
+      { apiVersion: 'v1' }
+    );
 
     // 画面から受け取った「現在の食材リスト」を会話の先頭に追加
     const fullHistory = [
