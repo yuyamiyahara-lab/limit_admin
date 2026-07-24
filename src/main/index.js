@@ -95,34 +95,41 @@ ipcMain.handle('get-api-key', () => {
 // レンスラーからチャット要請が来たときの処理
 ipcMain.handle('send-recipe-chat', async (event, ingredientsPrompt, chatHistory) => {
   try {
-    // 1. 保存されているAPIキーを取得
-    const apiKey = store.get('geminiApiKey'); // db.jsとキー名を合わせる
+    // 1. 保存されているAPIキーを取得して不要な余白をトリミング
+    let apiKey = store.get('geminiApiKey', '');
+    if (typeof apiKey === 'string') {
+      apiKey = apiKey.trim();
+    }
     if (!apiKey) throw new Error('API_KEY_NOT_FOUND');
 
-    // 2. Gemini APIの初期化
+    // 2. 使用するモデル名をデバッグログに出力
+    const targetModel = 'gemini-3.5-flash-lite';
+    console.log(`[Main Process] Requesting chat with model: ${targetModel}`);
+
+    // 3. Gemini APIの初期化
     const genAI = new GoogleGenerativeAI(apiKey);
     
-    // 3. モデルを指定
+    // 4. モデルを指定
     const model = genAI.getGenerativeModel({ 
-      model: 'models/gemini-2.5-flash',
+      model: targetModel,
       systemInstruction: "あなたはプロの料理研究家です。挨拶や前置きは省略し、提示された食材情報に基づいて、すぐに提案する料理の具体的なレシピを提案してください。",
       generationConfig: {
         responseMimeType: "application/json",
         responseSchema: {
-          type: "object",
+          type: "OBJECT",
           properties: {
             title: {
-              type: "string",
+              type: "STRING",
               description: "レシピ名。先頭にその料理を表す絵文字を1から3個含めてください。例: '🍳 ふわとろオムライス', '🍛 チキンカレー'"
             },
             content: {
-              type: "string",
+              type: "STRING",
               description: "具体的なレシピの本文（Markdown形式）。材料一覧や作り方の手順を含めてください。挨拶や前置きは含めないでください。"
             },
             ingredients: {
-              type: "array",
+              type: "ARRAY",
               items: {
-                type: "string"
+                type: "STRING"
               },
               description: "このレシピに必要な主な食材のリスト。塩、醤油、砂糖、みりん、味噌、油などの一般的な調味料や、小麦粉、片栗粉、パン粉などの粉類は除外してください。例: ['鶏もも肉', '玉ねぎ', '卵']"
             }
