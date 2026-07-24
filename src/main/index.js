@@ -79,7 +79,7 @@ app.on('window-all-closed', () => {
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
 
-const store = new Store({ encryptionKey: 'your-safe-encryption-key-here' }); // APIキーなどを安全に保存
+const store = new Store(); // APIキーなどを保存
 
 // --- APIキーの保存・取得処理を electron-store を使うように統一 ---
 // APIキーの保存

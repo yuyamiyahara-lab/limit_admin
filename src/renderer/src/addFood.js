@@ -1,4 +1,5 @@
 import { renderHomeFoodList } from './home.js';
+import { renderManageFoodList } from './manageFood.js';
 
 // ------------------------------
 // 食材追加画面の処理
@@ -42,6 +43,8 @@ function setupFormHandler() {
       form.reset();
       renderHomeFoodList();
       renderMiniFoodList();
+      const currentSort = document.getElementById('manage-sort-order')?.value || 'deadline';
+      renderManageFoodList(currentSort);
     } catch (error) {
       console.error('保存失敗:', error);
     }
@@ -195,6 +198,8 @@ function setupFrequentEditHandler() {
   const editBtn = document.querySelector('.screen-add__frequent-edit');
   if (!editBtn) return;
 
+  const container = document.getElementById('frequent-items-container');
+
   const editingTextSpan = document.createElement('span');
   editingTextSpan.textContent = '編集中';
   editingTextSpan.style.display = 'none';
@@ -207,12 +212,18 @@ function setupFrequentEditHandler() {
   editBtn.addEventListener('click', () => {
     isEditingFrequent = !isEditingFrequent;
 
+
     if (isEditingFrequent) {
       editBtn.textContent = '完了';
       editingTextSpan.style.display = 'inline';
+
+      if (container) container.classList.add('is-editing');
+
     } else {
       editBtn.textContent = '編集';
       editingTextSpan.style.display = 'none';
+
+      if (container) container.classList.remove('is-editing');
     }
   });
 }

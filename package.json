@@ -30,7 +30,7 @@
     "@electron-toolkit/eslint-config": "^2.1.0",
     "@electron-toolkit/eslint-config-prettier": "^3.0.0",
     "@electron/rebuild": "^4.0.4",
-    "electron": "^39.8.9",
+    "electron": "^42.4.1",
     "electron-builder": "^26.0.12",
     "electron-vite": "^5.0.0",
     "eslint": "^9.39.1",
