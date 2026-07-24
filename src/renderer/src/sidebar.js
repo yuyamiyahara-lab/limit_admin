@@ -10,6 +10,11 @@ document.addEventListener('DOMContentLoaded', () => {
   // 2. すべてのボタンにクリックイベントを設定
   navButtons.forEach(button => {
     button.addEventListener('click', () => {
+      // 画面切り替え時に古い画面のフォーカスを解除する
+      if (document.activeElement && typeof document.activeElement.blur === 'function') {
+        document.activeElement.blur();
+      }
+
       // ① ボタンのactiveクラスを切り替える
       navButtons.forEach(btn => btn.classList.remove('active'));
       button.classList.add('active');

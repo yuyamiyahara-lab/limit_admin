@@ -9,4 +9,4 @@ import './addFood.js';
 import './manageFood.js';
 import './settings.js';
 import './recipe.js';
-import './history.js';
+import './saved.js';
