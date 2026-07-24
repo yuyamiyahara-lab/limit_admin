@@ -95,16 +95,23 @@ ipcMain.handle('get-api-key', () => {
 // レンスラーからチャット要請が来たときの処理
 ipcMain.handle('send-recipe-chat', async (event, ingredientsPrompt, chatHistory) => {
   try {
-    // 1. 保存されているAPIキーを取得
-    const apiKey = store.get('geminiApiKey'); // db.jsとキー名を合わせる
+    // 1. 保存されているAPIキーを取得して不要な余白をトリミング
+    let apiKey = store.get('geminiApiKey', '');
+    if (typeof apiKey === 'string') {
+      apiKey = apiKey.trim();
+    }
     if (!apiKey) throw new Error('API_KEY_NOT_FOUND');
 
-    // 2. Gemini APIの初期化
+    // 2. 使用するモデル名をデバッグログに出力
+    const targetModel = 'models/gemini-2.5-flash';
+    console.log(`[Main Process] Requesting chat with model: ${targetModel}`);
+
+    // 3. Gemini APIの初期化
     const genAI = new GoogleGenerativeAI(apiKey);
     
-    // 3. モデルを指定
+    // 4. モデルを指定
     const model = genAI.getGenerativeModel({ 
-      model: 'gemini-1.5-flash',
+      model: targetModel,
       systemInstruction: "あなたはプロの料理研究家です。挨拶や前置きは省略し、提示された食材情報に基づいて、すぐに提案する料理の具体的なレシピを提案してください。",
       generationConfig: {
         responseMimeType: "application/json",
