@@ -102,63 +102,42 @@ ipcMain.handle('send-recipe-chat', async (event, ingredientsPrompt, chatHistory)
     }
     if (!apiKey) throw new Error('API_KEY_NOT_FOUND');
 
-    // 【一時デバッグ】利用可能なモデルをREST APIで取得してコンソールに出力
-    try {
-      const listUrl = `https://generativelanguage.googleapis.com/v1/models?key=${apiKey}`;
-      const listResponse = await fetch(listUrl);
-      const listData = await listResponse.json();
-      if (listData.models) {
-        console.log("[Main Process] === Available Models for this API Key ===");
-        listData.models.forEach(m => {
-          console.log(`  - ${m.name} (methods: ${m.supportedGenerationMethods.join(', ')})`);
-        });
-        console.log("[Main Process] ========================================");
-      } else {
-        console.log("[Main Process] Failed to list models, response:", listData);
-      }
-    } catch (e) {
-      console.error("[Main Process] Error listing models:", e);
-    }
-
     // 2. 使用するモデル名をデバッグログに出力
-    const targetModel = 'gemini-1.5-flash';
+    const targetModel = 'gemini-2.0-flash';
     console.log(`[Main Process] Requesting chat with model: ${targetModel}`);
 
     // 3. Gemini APIの初期化
     const genAI = new GoogleGenerativeAI(apiKey);
     
-    // 4. モデルを指定 (安定版のv1エンドポイントと大文字スキーマを指定)
-    const model = genAI.getGenerativeModel(
-      { 
-        model: targetModel,
-        systemInstruction: "あなたはプロの料理研究家です。挨拶や前置きは省略し、提示された食材情報に基づいて、すぐに提案する料理の具体的なレシピを提案してください。",
-        generationConfig: {
-          responseMimeType: "application/json",
-          responseSchema: {
-            type: "OBJECT",
-            properties: {
-              title: {
-                type: "STRING",
-                description: "レシピ名。先頭にその料理を表す絵文字を1から3個含めてください。例: '🍳 ふわとろオムライス', '🍛 チキンカレー'"
-              },
-              content: {
-                type: "STRING",
-                description: "具体的なレシピの本文（Markdown形式）。材料一覧や作り方の手順を含めてください。挨拶や前置きは含めないでください。"
-              },
-              ingredients: {
-                type: "ARRAY",
-                items: {
-                  type: "STRING"
-                },
-                description: "このレシピに必要な主な食材のリスト。塩、醤油、砂糖、みりん、味噌、油などの一般的な調味料や、小麦粉、片栗粉、パン粉などの粉類は除外してください。例: ['鶏もも肉', '玉ねぎ', '卵']"
-              }
+    // 4. モデルを指定
+    const model = genAI.getGenerativeModel({ 
+      model: targetModel,
+      systemInstruction: "あなたはプロの料理研究家です。挨拶や前置きは省略し、提示された食材情報に基づいて、すぐに提案する料理の具体的なレシピを提案してください。",
+      generationConfig: {
+        responseMimeType: "application/json",
+        responseSchema: {
+          type: "OBJECT",
+          properties: {
+            title: {
+              type: "STRING",
+              description: "レシピ名。先頭にその料理を表す絵文字を1から3個含めてください。例: '🍳 ふわとろオムライス', '🍛 チキンカレー'"
             },
-            required: ["title", "content", "ingredients"]
-          }
+            content: {
+              type: "STRING",
+              description: "具体的なレシピの本文（Markdown形式）。材料一覧や作り方の手順を含めてください。挨拶や前置きは含めないでください。"
+            },
+            ingredients: {
+              type: "ARRAY",
+              items: {
+                type: "STRING"
+              },
+              description: "このレシピに必要な主な食材のリスト。塩、醤油、砂糖、みりん、味噌、油などの一般的な調味料や、小麦粉、片栗粉、パン粉などの粉類は除外してください。例: ['鶏もも肉', '玉ねぎ', '卵']"
+            }
+          },
+          required: ["title", "content", "ingredients"]
         }
-      },
-      { apiVersion: 'v1' }
-    );
+      }
+    });
 
     // 画面から受け取った「現在の食材リスト」を会話の先頭に追加
     const fullHistory = [
