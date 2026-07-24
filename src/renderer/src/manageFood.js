@@ -13,8 +13,17 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
+// 表示順の更新を監視
+const select = document.getElementById('manage-sort-order');
+if (select) {
+  select.addEventListener('change', (event) => {
+    const currentSort = event.target?.value || 'deadline';
+    renderManageFoodList(currentSort);
+  });
+}
+
 // 管理画面のリスト描画関数
-async function renderManageFoodList(sortBy = 'deadline') {
+export async function renderManageFoodList(sortBy = 'deadline') {
   const container = document.getElementById('manage-food-list');
   if (!container) return;
 
@@ -37,21 +46,24 @@ async function renderManageFoodList(sortBy = 'deadline') {
         daysLeftText = `あと${diffDays}日`;
       }
 
-      const noteHTML = item.remarks ? `<div class="card__note">${item.remarks}</div>` : '';
+      const noteHTML = item.remarks ? `<div class="card__note"><div class='card__notetitle'>備考</div>${item.remarks}</div>`
+                                      : `<div class="card__note"><div class='card__notetitle'>備考</div></div>`;
       const itemDataJson = JSON.stringify(item).replace(/"/g, '&quot;');
 
       const cardHTML = `
-        <div class="card" id="card-${item.id}" data-item="${itemDataJson}">
-          <div class="card__meta">
-            <div class="card__name">${item.name}</div>
-            <div class="card__deadline">${item.type}: ${item.deadline}</div>
-          </div>
-          <div class="card__amount">${item.amount}${item.unit}</div>
-          
-          <div class="card__actions">
-            <div class="card__menu"><button class="js-edit-btn">編集</button></div>
-            <div class="card__delete"><button class="js-delete-btn" data-id="${item.id}" data-name="${item.name}">削除</button></div>
-            <div class="card__pulldown"></div>
+        <div class="card__wrap">
+          <div class="card" id="card-${item.id}" data-item="${itemDataJson}">
+            <div class="card__meta">
+              <div class="card__name">${item.name}</div>
+              <div class="card__deadline">${item.type}: ${item.deadline}</div>
+            </div>
+            <div class="card__amount">${item.amount}${item.unit}</div>
+            
+            <div class="card__actions">
+              <div class="card__delete"><button class="js-delete-btn" data-id="${item.id}" data-name="${item.name}"><img src="./assets/images/trash-icon.svg"></button></div>
+              <div class="card__menu"><button class="js-edit-btn">⋯</button></div>
+              <div class="card__pulldown"><button class="js-pulldown-btn"><img src="./assets/images/pulldown-icon.svg"></button></div>
+            </div>
           </div>
           
           ${noteHTML}
@@ -59,13 +71,28 @@ async function renderManageFoodList(sortBy = 'deadline') {
       `;
 
       container.insertAdjacentHTML('beforeend', cardHTML);
+
+      const card = container.lastElementChild.querySelector('.card');
+
+      if (diffDays <= 3) {
+        card.classList.remove('is_warning');
+        card.classList.add('is_alert');
+      } else if (diffDays <= 7) {
+        card.classList.remove('is_alert');
+        card.classList.add('is_warning');
+      } else {
+        card.classList.remove('is_alert', 'is_warning');
+      }
     });
 
     // 編集ボタンのイベント
     attachEditEventListeners();
     
-    // 削除ボタンのイベントを設定する
+    // 削除ボタンのイベント
     attachDeleteEventListeners();
+
+    // プルダウンボタンのイベント
+    attachPulldownEventListeners();
 
   } catch (error) {
     console.error('管理画面のデータ取得に失敗しました:', error);
@@ -177,8 +204,8 @@ function attachDeleteEventListeners() {
   
   deleteButtons.forEach(button => {
     button.addEventListener('click', async (event) => {
-      const id = parseInt(event.target.getAttribute('data-id'));
-      const name = event.target.getAttribute('data-name');
+      const id = parseInt(event.currentTarget.getAttribute('data-id'));
+      const name = event.currentTarget.getAttribute('data-name');
 
       const confirmDelete = confirm(`「${name}」をリストから削除してもよろしいですか？`);
       
@@ -199,6 +226,19 @@ function attachDeleteEventListeners() {
           alert('削除に失敗しました。');
         }
       }
+    });
+  });
+}
+
+// プルダウンボタンのクリックを監視する関数
+function attachPulldownEventListeners() {
+  const pulldownButtons = document.querySelectorAll('.js-pulldown-btn');
+  
+  pulldownButtons.forEach(button => {
+    button.addEventListener('click', async (event) => {
+      const wrap = event.currentTarget.closest('.card__wrap');
+      const note = wrap.querySelector('.card__note');
+      note.classList.toggle('open');
     });
   });
 }

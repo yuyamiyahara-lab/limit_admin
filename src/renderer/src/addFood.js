@@ -1,4 +1,5 @@
 import { renderHomeFoodList } from './home.js';
+import { renderManageFoodList } from './manageFood.js';
 
 // ------------------------------
 // 食材追加画面の処理
@@ -42,6 +43,8 @@ function setupFormHandler() {
       form.reset();
       renderHomeFoodList();
       renderMiniFoodList();
+      const currentSort = document.getElementById('manage-sort-order')?.value || 'deadline';
+      renderManageFoodList(currentSort);
     } catch (error) {
       console.error('保存失敗:', error);
     }

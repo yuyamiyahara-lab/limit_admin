@@ -1,1 +1,156 @@
-@use 'variables';
+@use 'variables' as *;
+.screen-manage {
+    &__header {
+        color: $primary-color;
+        display: flex;
+        flex-direction: row;
+        margin: 25px 50px;
+        .sort-container {
+            margin-left: auto;
+            select {
+                height: 100%;
+            }
+        }
+    }
+
+    .food-list {
+        &__items{
+            .card {
+                &__wrap {
+                    background-color: #EEEEEE;
+                    border-radius: $radius-md;
+                    box-shadow: $shadow-lg;
+                    margin: 15px 50px;
+                }
+
+                position: relative;
+                background-color: $bg-surface;
+                border-radius: $radius-md;
+                box-shadow: $shadow-lg;
+                align-items: center;
+                display: flex;
+                flex-direction: row;
+                padding: 10px 30px;
+                gap: 50px;
+
+                &__name {
+                    color: $text-main;
+                    font-size: 16px;
+                    font-weight: 500;
+                }
+                &__deadline {
+                    color: $text-muted;
+                    font-size: 14px;
+                    font-weight: 300;
+                }
+
+                &__amount {
+                    color: $text-main;
+                    font-size: 16px;
+                    font-weight: 500;
+                }
+                
+                &__actions {
+                    display: flex;
+                    flex-direction: row;
+                    margin-left: auto;
+                    font-size: 27px;
+                    
+                    gap: 10px;
+                    .js-edit-btn {
+                        color: $text-muted;
+                    }
+                }
+        
+                &__note {
+                    max-height: 0;
+                    overflow: hidden;
+                    visibility: hidden;
+                    &.open {
+                        padding: 10px 30px;
+                        max-height: 200px;
+                        word-break: auto-phrase;
+                        overflow-wrap: anywhere;
+                        overflow-y: auto;
+                        visibility: visible;
+                        color: $text-main;
+                        font-size: 16px;
+                        font-weight: 300;
+                    }
+                    &title {
+                        color: $text-main;
+                        font-size: 16px;
+                        font-weight: 500;
+                    }
+                }
+
+                &::after {
+                    content: "";
+                    position: absolute;
+                    right: 6px;
+                    width: 100%;
+                    height: 100%;
+                    border-radius: $radius-md;
+                    background-color: $status-neutral;
+                    z-index: -1;
+                }
+
+                &.is_alert::after {
+                    background-color: $status-alert;
+                }
+                &.is_warning::after {
+                    background-color: $status-warning;
+                }
+            }
+        }
+    }
+
+    .js-edit-form {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        color: $primary-color;
+        font-size: 16px;
+        font-weight: 500;
+
+        select {
+            height: 35px;
+        }
+        button {
+            margin-top: 10px;
+            width: 100%;
+            height: 40px;
+            background-color: $primary-color;
+            color: $bg-surface;
+            border-radius: $radius-sm;
+        }
+        .form__group--full {
+            input {
+                height: 40px;
+            }
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+            textarea {
+                height: 60px;
+            }
+        }
+        .form--row {
+            display: flex;
+            flex-direction: row;
+            input {
+                width: 90%;
+                height: 35px;
+            }
+            .form__group {
+                display: flex;
+                flex-direction: column;
+                label {
+                    flex-grow: 1;
+                }
+            }
+        }
+    }
+
+}
+
