@@ -134,8 +134,6 @@ function setupRecipeChatHandler() {
           })
           saveButton.textContent = '保存しました'
           saveButton.disabled = true
-          saveButton.style.backgroundColor = '#ccc'
-          saveButton.style.cursor = 'default'
         } catch (error) {
           console.error(error)
           alert('レシピの保存に失敗しました。')
