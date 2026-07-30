@@ -187,3 +187,77 @@ ipcMain.on('show-confirm', (event, message) => {
   })
   event.returnValue = result === 0 // OKならtrue、キャンセルならfalseを返す
 })
+
+// アプリケーション終了要求の処理
+ipcMain.on('close-app', () => {
+  app.quit()
+})
+
+// レシート画像の解析要求の処理
+ipcMain.handle('analyze-receipt', async (event, base64Image, mimeType) => {
+  try {
+    const apiKey = store.get('geminiApiKey', '').trim()
+    if (!apiKey) throw new Error('API_KEY_NOT_FOUND')
+
+    const genAI = new GoogleGenerativeAI(apiKey)
+    // 画像解析とJSONスキーマ出力に対応した gemini-1.5-flash を使用
+    const model = genAI.getGenerativeModel({
+      model: 'gemini-3.5-flash-lite',
+      generationConfig: {
+        responseMimeType: 'application/json',
+        responseSchema: {
+          type: 'OBJECT',
+          properties: {
+            items: {
+              type: 'ARRAY',
+              items: {
+                type: 'OBJECT',
+                properties: {
+                  name: {
+                    type: 'STRING',
+                    description:
+                      '食材名（レシート上の表記ではなく、一般的な日本語名に正規化してください。例: バラ肉 -> 豚バラ肉、レタス -> レタス）'
+                  },
+                  amount: { type: 'NUMBER', description: '個数または数量' },
+                  unit: { type: 'STRING', description: '単位（例: 個, パック, 本, g, ml）' },
+                  type: {
+                    type: 'STRING',
+                    enum: ['賞味期限', '消費期限'],
+                    description:
+                      '期限の種類。生鮮食品や肉・魚は消費期限、加工品や調味料は賞味期限。'
+                  },
+                  daysLimit: {
+                    type: 'INTEGER',
+                    description:
+                      '一般的な食材の保存期間を考慮し、本日購入したとして、期限切れになるまでの目安日数。生鮮肉類=2, 生鮮魚類=2, 葉物野菜=5, 根菜類=14, 卵=10, 牛乳=5, 缶詰=365など。'
+                  }
+                },
+                required: ['name', 'amount', 'unit', 'type', 'daysLimit']
+              }
+            }
+          },
+          required: ['items']
+        }
+      }
+    })
+
+    const imagePart = {
+      inlineData: {
+        data: base64Image,
+        mimeType: mimeType
+      }
+    }
+
+    const prompt =
+      '提供されたレシート画像から、購入された食材とその個数、単位をすべて抽出してください。不要な品物（日用品、レジ袋、お酒、衣類など）は除外してください。'
+    const result = await model.generateContent([prompt, imagePart])
+    const response = result.response
+    return { success: true, data: JSON.parse(response.text()) }
+  } catch (error) {
+    console.error('Receipt Analysis Error:', error)
+    if (error.message.includes('API key not valid')) {
+      return { success: false, error: 'API_KEY_INVALID' }
+    }
+    return { success: false, error: error.message }
+  }
+})

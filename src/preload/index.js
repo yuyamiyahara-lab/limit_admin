@@ -28,7 +28,10 @@ const api = {
   deleteRecipe: (id) => ipcRenderer.invoke('delete-recipe', id),
 
   showAlert: (message) => ipcRenderer.sendSync('show-alert', message),
-  showConfirm: (message) => ipcRenderer.sendSync('show-confirm', message)
+  showConfirm: (message) => ipcRenderer.sendSync('show-confirm', message),
+  closeApp: () => ipcRenderer.send('close-app'),
+  analyzeReceipt: (base64Image, mimeType) =>
+    ipcRenderer.invoke('analyze-receipt', base64Image, mimeType)
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to

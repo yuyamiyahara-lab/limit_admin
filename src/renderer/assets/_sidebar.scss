@@ -1,6 +1,8 @@
 @use 'variables' as *;
 
 .sidebar {
+  overflow: hidden;
+
   &__wrap {
     align-items: center;
     display: flex;
@@ -63,9 +65,29 @@
 
   &__control {
     display: flex;
+    justify-content: flex-end;
+    width: 200px;
+    gap: 10px;
 
     button {
-      display: block;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      border: 2px solid $primary-border;
+      border-radius: $radius-md;
+      transition: $transition;
+
+      &:hover {
+        background-color: #738e45;
+        border-color: #d9e2c9;
+      }
+
+      img {
+        width: 24px;
+        height: 24px;
+      }
     }
   }
 }

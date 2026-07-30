@@ -14,6 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
   setupFrequentModalHandler()
   setupFrequentEditHandler()
   renderMiniFoodList()
+  setupReceiptReaderHandler()
 })
 
 function setupFormHandler() {
@@ -221,5 +222,103 @@ function setupFrequentEditHandler() {
 
       if (container) container.classList.remove('is-editing')
     }
+  })
+}
+
+function setupReceiptReaderHandler() {
+  const uploadBtn = document.getElementById('js-receipt-upload-btn')
+  const fileInput = document.getElementById('js-receipt-file-input')
+  const loadingText = document.querySelector('.js-receipt-loading')
+  const itemsContainer = document.querySelector('.js-receipt-items-container')
+
+  if (!uploadBtn || !fileInput || !loadingText || !itemsContainer) return
+
+  uploadBtn.addEventListener('click', () => {
+    fileInput.click()
+  })
+
+  fileInput.addEventListener('change', async (event) => {
+    const file = event.target.files[0]
+    if (!file) return
+
+    loadingText.classList.remove('inactive')
+    itemsContainer.innerHTML = ''
+
+    try {
+      const { base64Data, mimeType } = await fileToBase64(file)
+      const result = await window.api.analyzeReceipt(base64Data, mimeType)
+
+      loadingText.classList.add('inactive')
+
+      if (!result.success) {
+        if (result.error === 'API_KEY_NOT_FOUND') {
+          alert('APIキーが設定されていません。設定画面から保存してください。')
+        } else if (result.error === 'API_KEY_INVALID') {
+          alert('APIキーが正しくありません。設定画面から正しいキーを保存してください。')
+        } else {
+          alert(`解析に失敗しました: ${result.error}`)
+        }
+        return
+      }
+
+      const items = result.data.items || []
+      if (items.length === 0) {
+        alert('レシートから食材を検出できませんでした。別の画像をお試しください。')
+        return
+      }
+
+      items.forEach((item) => {
+        const btn = document.createElement('button')
+        btn.type = 'button'
+        btn.className = 'receipt-item-btn'
+        btn.textContent = `${item.name} (${item.amount}${item.unit || ''})`
+
+        btn.addEventListener('click', () => {
+          const mainForm = document.querySelector('.js-add-form')
+          if (!mainForm) return
+
+          mainForm.querySelector('[name="name"]').value = item.name
+          mainForm.querySelector('[name="amount"]').value = item.amount
+          mainForm.querySelector('[name="unit"]').value = item.unit || ''
+          mainForm.querySelector('[name="type"]').value = item.type || '賞味期限'
+
+          const deadlineInput = mainForm.querySelector('[name="deadline"]')
+          if (deadlineInput) {
+            const today = new Date()
+            today.setDate(today.getDate() + (item.daysLimit || 0))
+
+            const yyyy = today.getFullYear()
+            const mm = String(today.getMonth() + 1).padStart(2, '0')
+            const dd = String(today.getDate()).padStart(2, '0')
+            deadlineInput.value = `${yyyy}-${mm}-${dd}`
+
+            deadlineInput.focus()
+          }
+        })
+
+        itemsContainer.appendChild(btn)
+      })
+    } catch (error) {
+      console.error('レシート処理エラー:', error)
+      loadingText.classList.add('inactive')
+      alert('エラーが発生しました。ファイルの読み込みに失敗した可能性があります。')
+    } finally {
+      fileInput.value = ''
+    }
+  })
+}
+
+function fileToBase64(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    reader.readAsDataURL(file)
+    reader.onload = () => {
+      const result = reader.result
+      const commaIndex = result.indexOf(',')
+      const base64Data = result.substring(commaIndex + 1)
+      const mimeType = file.type
+      resolve({ base64Data, mimeType })
+    }
+    reader.onerror = (error) => reject(error)
   })
 }

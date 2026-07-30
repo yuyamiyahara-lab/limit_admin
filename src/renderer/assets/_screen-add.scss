@@ -1,9 +1,10 @@
-@use 'variables';
+@use 'variables' as *;
 @use 'sass:color';
 
 .screen-add {
   color: #556b2f;
   font-weight: 700;
+  padding-bottom: 40px;
 
   &.active {
     display: block;
@@ -23,6 +24,95 @@
 
   &__frequent {
     margin: 0px 55px 30px 55px;
+  }
+
+  &__receipt {
+    margin: 0px 55px 30px 55px;
+  }
+
+  &__receipt--meta {
+    margin-bottom: 12px;
+
+    h3 {
+      margin: 0;
+      font-size: 16px;
+      color: #444444;
+    }
+  }
+
+  &__receipt-controls {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 15px;
+  }
+
+  .btn-read-receipt {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background-color: $primary-color;
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: bold;
+    border-radius: $radius-sm;
+    border: none;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+    transition: $transition;
+    cursor: pointer;
+
+    img {
+      width: 18px;
+      height: 18px;
+    }
+
+    &:hover {
+      background-color: $primary-color-light;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    }
+
+    &:active {
+      transform: translateY(0);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+    }
+  }
+
+  &__receipt-loading {
+    font-size: 14px;
+    color: $text-muted;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+
+    &.inactive {
+      display: none;
+    }
+  }
+
+  &__receipt-items {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+
+    .receipt-item-btn {
+      padding: 4px 10px 4px 10px;
+      background-color: #e8f2d8;
+      color: #444444;
+      font-size: 14px;
+      border-radius: 20px;
+      border: none;
+      margin-right: 10px;
+      margin-bottom: 10px;
+      cursor: pointer;
+      transition: $transition;
+
+      &:hover {
+        background-color: #556b2f;
+        color: #fcfcfc;
+      }
+    }
   }
 
   &__frequent--meta {

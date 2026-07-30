@@ -32,8 +32,12 @@
           </button>
         </nav>
         <div class="sidebar__control">
-          <button class="sidebar__settings" data-target="view-settings">設定</button>
-          <button class="sidebar__power">電源</button>
+          <button class="sidebar__settings" data-target="view-settings">
+            <img src="./assets/images/setting.svg" alt="設定" />
+          </button>
+          <button class="sidebar__power">
+            <img src="./assets/images/power.svg" alt="電源" />
+          </button>
         </div>
       </div>
     </aside>
@@ -105,6 +109,23 @@
               ＋ 登録
             </button>
           </div>
+        </div>
+
+        <div class="screen-add__receipt">
+          <div class="screen-add__receipt--meta">
+            <h3 class="screen-add__receipt-title">レシートの読み取り</h3>
+          </div>
+          <div class="screen-add__receipt-controls">
+            <input type="file" id="js-receipt-file-input" accept="image/*" style="display: none" />
+            <button type="button" class="btn-read-receipt" id="js-receipt-upload-btn">
+              <img src="./assets/images/camera.svg" alt="カメラ" />
+              <span>レシートを読み取る</span>
+            </button>
+            <span class="screen-add__receipt-loading js-receipt-loading inactive"
+              >レシートを解析中...</span
+            >
+          </div>
+          <div class="screen-add__receipt-items js-receipt-items-container"></div>
         </div>
 
         <div class="form__container--frequent js-frequent-modal inactive">

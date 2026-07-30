@@ -35,4 +35,15 @@ document.addEventListener('DOMContentLoaded', () => {
       })
     })
   })
+
+  // 3. 電源ボタンのクリックイベントを設定
+  const powerButton = document.querySelector('.sidebar__power')
+  if (powerButton) {
+    powerButton.addEventListener('click', () => {
+      const confirmClose = confirm('アプリを終了しますか？')
+      if (confirmClose) {
+        window.api.closeApp()
+      }
+    })
+  }
 })
