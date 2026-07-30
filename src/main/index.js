@@ -1,4 +1,4 @@
-import { app, shell, BrowserWindow, ipcMain } from 'electron'
+import { app, shell, BrowserWindow, ipcMain, dialog } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import Store from 'electron-store'
@@ -161,4 +161,29 @@ ipcMain.handle('send-recipe-chat', async (event, ingredientsPrompt, chatHistory)
     }
     return { success: false, error: error.message }
   }
+})
+
+// レンダラープロセスからの同期ダイアログ表示要求の処理
+ipcMain.on('show-alert', (event, message) => {
+  const win = BrowserWindow.getFocusedWindow() || BrowserWindow.getAllWindows()[0]
+  dialog.showMessageBoxSync(win, {
+    type: 'info',
+    title: 'アプリからのメッセージ',
+    message: message,
+    buttons: ['OK']
+  })
+  event.returnValue = null
+})
+
+ipcMain.on('show-confirm', (event, message) => {
+  const win = BrowserWindow.getFocusedWindow() || BrowserWindow.getAllWindows()[0]
+  const result = dialog.showMessageBoxSync(win, {
+    type: 'question',
+    title: '確認',
+    message: message,
+    buttons: ['OK', 'キャンセル'],
+    defaultId: 0,
+    cancelId: 1
+  })
+  event.returnValue = result === 0 // OKならtrue、キャンセルならfalseを返す
 })

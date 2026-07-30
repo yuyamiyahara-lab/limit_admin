@@ -25,7 +25,10 @@ const api = {
   // レシピ保存機能
   addRecipe: (data) => ipcRenderer.invoke('add-recipe', data),
   getRecipes: () => ipcRenderer.invoke('get-recipes'),
-  deleteRecipe: (id) => ipcRenderer.invoke('delete-recipe', id)
+  deleteRecipe: (id) => ipcRenderer.invoke('delete-recipe', id),
+
+  showAlert: (message) => ipcRenderer.sendSync('show-alert', message),
+  showConfirm: (message) => ipcRenderer.sendSync('show-confirm', message)
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to
