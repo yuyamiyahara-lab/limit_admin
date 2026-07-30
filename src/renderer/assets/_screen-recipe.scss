@@ -12,7 +12,7 @@
 
   // inactiveクラスがついている時は非表示にする場合
   &.inactive {
-    display: none; 
+    display: none;
   }
 
   /* 1. タイトルエリア */
@@ -29,9 +29,9 @@
 
     // 「保存したレシピを見る」ボタン
     .js-go-to-history-btn {
-      background-color: #556B2F;
+      background-color: #556b2f;
       border: 1px solid $primary-color;
-      color: #FCFCFC;
+      color: #fcfcfc;
       padding: 6px 12px;
       border-radius: 4px;
       font-size: 0.85rem;
@@ -79,15 +79,16 @@
         display: flex;
         justify-content: flex-start;
 
-        p, & > div {
+        p,
+        & > div {
           max-width: 90%;
           background-color: $bg-modal-header;
           border: 1px solid #eeeeee;
           padding: 12px 16px;
-          
+
           /* ▼ ここを変更（左上だけ 0 にする） ▼ */
-          border-radius: 0 8px 8px 8px; 
-          
+          border-radius: 0 8px 8px 8px;
+
           line-height: 1.5;
           font-size: 0.9rem;
           color: $text-main;
@@ -100,22 +101,24 @@
       .message--user {
         display: flex;
         justify-content: flex-end;
-        align-self: flex-end; 
-        
+        align-self: flex-end;
+
         max-width: 90%;
         background-color: $primary-tag-bg;
         padding: 12px 16px;
 
         /* ▼ ここを変更（右上だけ 0 にする） ▼ */
         border-radius: 8px 0 8px 8px;
-        
+
         line-height: 1.5;
         font-size: 0.9rem;
         color: $text-main;
         margin: 0;
         word-break: break-word;
 
-        p { margin: 0; }
+        p {
+          margin: 0;
+        }
       }
 
       /* ③ システムメッセージ（エラー表示など） */
@@ -134,10 +137,10 @@
     &__input {
       display: flex;
       gap: 10px;
-      align-items: flex-end; 
-      
+      align-items: flex-end;
+
       // 前回の「端から端まで線を引く」修正
-      border-top: 1px solid #CCCCCC;
+      border-top: 1px solid #cccccc;
       margin: 0 -20px;
       padding: 15px 20px 0 20px;
 
@@ -150,7 +153,7 @@
         border-radius: 4px;
         font-size: 0.9rem;
         background-color: #fafafa;
-        resize: none; 
+        resize: none;
         font-family: inherit;
 
         &:focus {
@@ -164,9 +167,9 @@
       button.chat-area__submit {
         background-color: $primary-color;
         border: none;
-        width: 40px;   
+        width: 40px;
         height: 40px;
-        border-radius: 50%; 
+        border-radius: 50%;
         cursor: pointer;
         display: flex;
         align-items: center;
@@ -175,14 +178,14 @@
         transition: opacity 0.2s;
 
         // ▼ 前回の font-size や transform: rotate(45deg); は消してください ▼
-        
+
         &:hover {
           opacity: 0.9;
         }
 
         // ▼ 中の画像（img）のサイズ指定を追加 ▼
         img {
-          width: 20px;  // 画像の大きさに合わせて数値を調整してください
+          width: 20px; // 画像の大きさに合わせて数値を調整してください
           height: 20px;
           object-fit: contain;
         }

@@ -6,7 +6,6 @@ import { GoogleGenerativeAI } from '@google/generative-ai' // SDKの読み込み
 import icon from '../../resources/icon.png?asset'
 import { initDatabase } from './db.js'
 
-
 function createWindow() {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
@@ -57,7 +56,7 @@ app.whenReady().then(() => {
 
   // IPC test
   ipcMain.on('ping', () => console.log('pong'))
-  initDatabase()   // dbの初期化処理
+  initDatabase() // dbの初期化処理
   createWindow()
 
   app.on('activate', function () {
@@ -79,87 +78,87 @@ app.on('window-all-closed', () => {
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
 
-const store = new Store(); // APIキーなどを保存
+const store = new Store() // APIキーなどを保存
 
 // --- APIキーの保存・取得処理を electron-store を使うように統一 ---
 // APIキーの保存
 ipcMain.handle('save-api-key', (event, apiKey) => {
-  store.set('geminiApiKey', apiKey);
-});
+  store.set('geminiApiKey', apiKey)
+})
 
 // APIキーの取得
 ipcMain.handle('get-api-key', () => {
-  return store.get('geminiApiKey', ''); // 保存されていなければ空文字を返す
-});
+  return store.get('geminiApiKey', '') // 保存されていなければ空文字を返す
+})
 
 // レンスラーからチャット要請が来たときの処理
 ipcMain.handle('send-recipe-chat', async (event, ingredientsPrompt, chatHistory) => {
   try {
     // 1. 保存されているAPIキーを取得して不要な余白をトリミング
-    let apiKey = store.get('geminiApiKey', '');
+    let apiKey = store.get('geminiApiKey', '')
     if (typeof apiKey === 'string') {
-      apiKey = apiKey.trim();
+      apiKey = apiKey.trim()
     }
-    if (!apiKey) throw new Error('API_KEY_NOT_FOUND');
+    if (!apiKey) throw new Error('API_KEY_NOT_FOUND')
 
     // 2. 使用するモデル名をデバッグログに出力
-    const targetModel = 'gemini-3.5-flash-lite';
-    console.log(`[Main Process] Requesting chat with model: ${targetModel}`);
+    const targetModel = 'gemini-3.5-flash-lite'
+    console.log(`[Main Process] Requesting chat with model: ${targetModel}`)
 
     // 3. Gemini APIの初期化
-    const genAI = new GoogleGenerativeAI(apiKey);
-    
+    const genAI = new GoogleGenerativeAI(apiKey)
+
     // 4. モデルを指定
-    const model = genAI.getGenerativeModel({ 
+    const model = genAI.getGenerativeModel({
       model: targetModel,
-      systemInstruction: "あなたはプロの料理研究家です。挨拶や前置きは省略し、提示された食材情報に基づいて、すぐに提案する料理の具体的なレシピを提案してください。",
+      systemInstruction:
+        'あなたはプロの料理研究家です。挨拶や前置きは省略し、提示された食材情報に基づいて、すぐに提案する料理の具体的なレシピを提案してください。',
       generationConfig: {
-        responseMimeType: "application/json",
+        responseMimeType: 'application/json',
         responseSchema: {
-          type: "OBJECT",
+          type: 'OBJECT',
           properties: {
             title: {
-              type: "STRING",
-              description: "レシピ名。先頭にその料理を表す絵文字を1から3個含めてください。例: '🍳 ふわとろオムライス', '🍛 チキンカレー'"
+              type: 'STRING',
+              description:
+                "レシピ名。先頭にその料理を表す絵文字を1から3個含めてください。例: '🍳 ふわとろオムライス', '🍛 チキンカレー'"
             },
             content: {
-              type: "STRING",
-              description: "具体的なレシピの本文（Markdown形式）。材料一覧や作り方の手順を含めてください。挨拶や前置きは含めないでください。"
+              type: 'STRING',
+              description:
+                '具体的なレシピの本文（Markdown形式）。材料一覧や作り方の手順を含めてください。挨拶や前置きは含めないでください。'
             },
             ingredients: {
-              type: "ARRAY",
+              type: 'ARRAY',
               items: {
-                type: "STRING"
+                type: 'STRING'
               },
-              description: "このレシピに必要な主な食材のリスト。塩、醤油、砂糖、みりん、味噌、油などの一般的な調味料や、小麦粉、片栗粉、パン粉などの粉類は除外してください。例: ['鶏もも肉', '玉ねぎ', '卵']"
+              description:
+                "このレシピに必要な主な食材のリスト。塩、醤油、砂糖、みりん、味噌、油などの一般的な調味料や、小麦粉、片栗粉、パン粉などの粉類は除外してください。例: ['鶏もも肉', '玉ねぎ', '卵']"
             }
           },
-          required: ["title", "content", "ingredients"]
+          required: ['title', 'content', 'ingredients']
         }
       }
-    });
+    })
 
     // 画面から受け取った「現在の食材リスト」を会話の先頭に追加
-    const fullHistory = [
-      { role: 'user', parts: [{ text: ingredientsPrompt }] },
-      ...chatHistory
-    ];
+    const fullHistory = [{ role: 'user', parts: [{ text: ingredientsPrompt }] }, ...chatHistory]
 
     // 4. 通信を実行（rendererから送られてきた純粋な履歴をそのまま渡す）
-    const result = await model.generateContent({ contents: fullHistory });
-    const response = result.response;
+    const result = await model.generateContent({ contents: fullHistory })
+    const response = result.response
 
     // 5. AIのテキストをパースして画面に返す
-    const text = response.text();
-    const recipe = JSON.parse(text);
-    return { success: true, recipe: recipe };
-
+    const text = response.text()
+    const recipe = JSON.parse(text)
+    return { success: true, recipe: recipe }
   } catch (error) {
-    console.error('Gemini Error:', error);
+    console.error('Gemini Error:', error)
     // APIキーが不正な場合などのエラーをハンドリング
     if (error.message.includes('API key not valid')) {
-      return { success: false, error: 'API_KEY_INVALID' };
+      return { success: false, error: 'API_KEY_INVALID' }
     }
-    return { success: false, error: error.message };
+    return { success: false, error: error.message }
   }
-});
+})

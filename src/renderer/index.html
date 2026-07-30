@@ -1,258 +1,270 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>リミット管理</title>
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <title>リミット管理</title>
-</head>
-
-<body>
-  <aside class="sidebar --has-scroll" data-simplebar>
-    <div class="sidebar__wrap">
-      <div class="sidebar__title">
-        <img src="./assets/images/app-icon.svg">
-        <span>リミット管理</span>
-      </div>
-
-      <nav class="sidebar__nav">
-        <button class="sidebar__nav-btn active" data-target="view-home">
-          <img src="./assets/images/home-icon.svg">
-          <span>ホーム</span>
-        </button>
-        <button class="sidebar__nav-btn" data-target="view-add">
-          <img src="./assets/images/add-icon.svg">
-          <span>食材の追加</span>
-        </button>
-        <button class="sidebar__nav-btn" data-target="view-manage">
-          <img src="./assets/images/manage-icon.svg">
-          <span>食材の管理</span>
-        </button>
-        <button class="sidebar__nav-btn" data-target="view-recipe">
-          <img src="./assets/images/recipe-icon.svg">
-          <span>レシピ提案</span>
-        </button>
-      </nav>
-      <div class="sidebar__control">
-        <button class="sidebar__settings" data-target="view-settings">設定</button>
-        <button class="sidebar__power">電源</button>
-      </div>
-    </div>
-  </aside>
-  <main class="main --has-scroll" data-simplebar>
-
-    <div class="screen-home active">
-      <div class="summary">
-        <div class="summary__container">
-          <div class="summary__number" id="expiring-count">0</div>
-          <div class="summary__text">期間間近の食材</div>
+  <body>
+    <aside class="sidebar --has-scroll" data-simplebar>
+      <div class="sidebar__wrap">
+        <div class="sidebar__title">
+          <img src="./assets/images/app-icon.svg" />
+          <span>リミット管理</span>
         </div>
-        <div class="summary__container">
-          <div class="summary__number" id="registered-count">0</div>
-          <div class="summary__text">登録中の食材</div>
-        </div>
-      </div>
 
-      <div class="food-list">
-        <h3 class="food-list__title">期限が近い食材</h3>
-        <div class="food-list__items">
-          <div class="card">
-            <div class="card__meta">
-              <div class="card__name"></div>
-              <div class="card__deadline"></div>
-            </div>
-            <div class="card__amount"></div>
-            <div class="card__days-left"></div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="screen-recipe inactive">
-      <div class="screen-recipe__title">
-        <h2>レシピ提案</h2>
-        <button class="js-go-to-saved-btn">保存したレシピを見る</button>
-      </div>
-
-      <div class="chat-area">
-        <div class="chat-area__wrap --has-scroll" data-simplebar>
-          <div class="js-recipe-messages">
-            <div class="chat-area__message--ai">
-              <p>何を使ったレシピを提案しましょうか？</p>
-            </div>
-          </div>
-        </div>
-        <form class="chat-area__input js-recipe-form">
-          <textarea class="js-recipe-input" placeholder="食材や気分を入力してください" style="user-select: text; -webkit-user-select: text;"></textarea>
-          <button type="submit" class="chat-area__submit">
-            <img src="./assets/images/paper-plane.svg" alt="送信">
+        <nav class="sidebar__nav">
+          <button class="sidebar__nav-btn active" data-target="view-home">
+            <img src="./assets/images/home-icon.svg" />
+            <span>ホーム</span>
           </button>
-        </form>
-      </div>
-    </div>
-
-    <div class="screen-add inactive">
-      <div class="screen-add__title">
-        <h2>食材の追加</h2>
-      </div>
-
-      <div class="screen-add__frequent">
-        <div class="screen-add__frequent--meta">
-          <h3 class="screen-add__frequent-title">よく追加するもの</h3>
-          <div class="screen-add__frequent-edit--wrap">
-            <button class="screen-add__frequent-edit">編集</button>
-          </div>
-        </div>
-        <div class="screen-add__frequent-items" id="frequent-items-container">
-          <button type="button" class="btn-add-frequent" id="js-open-frequent-modal-btn">＋ 登録</button>
+          <button class="sidebar__nav-btn" data-target="view-add">
+            <img src="./assets/images/add-icon.svg" />
+            <span>食材の追加</span>
+          </button>
+          <button class="sidebar__nav-btn" data-target="view-manage">
+            <img src="./assets/images/manage-icon.svg" />
+            <span>食材の管理</span>
+          </button>
+          <button class="sidebar__nav-btn" data-target="view-recipe">
+            <img src="./assets/images/recipe-icon.svg" />
+            <span>レシピ提案</span>
+          </button>
+        </nav>
+        <div class="sidebar__control">
+          <button class="sidebar__settings" data-target="view-settings">設定</button>
+          <button class="sidebar__power">電源</button>
         </div>
       </div>
-
-      <div class="form__container--frequent js-frequent-modal inactive">
-        <form class="js-frequent-form">
-
-          <div class="form__group--full">
-            <label class="label">食材名</label>
-            <input type="text" name="name" required>
+    </aside>
+    <main class="main --has-scroll" data-simplebar>
+      <div class="screen-home active">
+        <div class="summary">
+          <div class="summary__container">
+            <div class="summary__number" id="expiring-count">0</div>
+            <div class="summary__text">期間間近の食材</div>
           </div>
-
-          <div class="form--row">
-            <div class="form__group">
-              <label class="label">量</label>
-              <input type="number" name="amount" min="0" step="any">
-            </div>
-
-            <div class="form__group">
-              <label class="label">単位</label>
-              <input type="text" name="unit">
-            </div>
-
-            <div class="form__group">
-              <label class="label">種類</label>
-              <select name="type">
-                <option value="賞味期限">賞味期限</option>
-                <option value="消費期限">消費期限</option>
-              </select>
-            </div>
+          <div class="summary__container">
+            <div class="summary__number" id="registered-count">0</div>
+            <div class="summary__text">登録中の食材</div>
           </div>
-
-          <div class="form__actions">
-            <button type="submit" class="form__submit">マスターに登録</button>
-            <button type="button" class="form__cancel js-close-frequent-modal-btn">キャンセル</button>
-          </div>
-
-        </form>
-      </div>
-
-      <div class="form__container">
-        <!-- 識別用に、追加フォームには class="js-add-form" をつけておく -->
-        <form class="js-add-form">
-
-          <div class="form__group--full">
-            <label class="label">食材名</label>
-            <input type="text" name="name" required>
-          </div>
-
-          <div class="form--row">
-            <div class="form__group">
-              <label class="label">量</label>
-              <input type="number" name="amount" min="0" step="any" required>
-            </div>
-
-            <div class="form__group">
-              <label class="label">単位</label>
-              <input type="text" name="unit">
-            </div>
-
-            <div class="form__group">
-              <label class="label">期限</label>
-              <input type="date" name="deadline" required>
-            </div>
-
-            <div class="form__group">
-              <label class="label"></label>
-              <select name="type">
-                <option value="賞味期限">賞味期限</option>
-                <option value="消費期限">消費期限</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="form__group--full">
-            <label class="label" for="food-name">備考</label>
-            <textarea name="notes" placeholder="メモや補足（例：冷凍保存中、早めに使うなど）"></textarea>
-          </div>
-
-          <button type="submit" class="form__submit">リストに追加</button>
-
-        </form>
-      </div>
-
-      <div class="mini-food-list">
-        <h3 class="mini-food-list__title">最近追加した食材</h3>
-        <div class="mini-food-list__items"></div>
-      </div>
-    </div>
-
-    <div class="screen-manage inactive">
-      <div class="screen-manage__header">
-        <div class="screen-manage__title">
-          <h2>食材の管理</h2>
         </div>
 
-        <div class="sort-container">
-          <select id="manage-sort-order">
-            <option value="deadline">期限が近い順</option>
-            <option value="created_at">登録が新しい順</option>
-          </select>
+        <div class="food-list">
+          <h3 class="food-list__title">期限が近い食材</h3>
+          <div class="food-list__items">
+            <div class="card">
+              <div class="card__meta">
+                <div class="card__name"></div>
+                <div class="card__deadline"></div>
+              </div>
+              <div class="card__amount"></div>
+              <div class="card__days-left"></div>
+            </div>
+          </div>
         </div>
       </div>
 
-      <div class="food-list">
-        <div class="food-list__items" id="manage-food-list">
+      <div class="screen-recipe inactive">
+        <div class="screen-recipe__title">
+          <h2>レシピ提案</h2>
+          <button class="js-go-to-saved-btn">保存したレシピを見る</button>
+        </div>
+
+        <div class="chat-area">
+          <div class="chat-area__wrap --has-scroll" data-simplebar>
+            <div class="js-recipe-messages">
+              <div class="chat-area__message--ai">
+                <p>何を使ったレシピを提案しましょうか？</p>
+              </div>
+            </div>
+          </div>
+          <form class="chat-area__input js-recipe-form">
+            <textarea class="js-recipe-input" placeholder="食材や気分を入力してください"></textarea>
+            <button type="submit" class="chat-area__submit">
+              <img src="./assets/images/paper-plane.svg" alt="送信" />
+            </button>
+          </form>
         </div>
       </div>
-    </div>
 
-    <div class="screen-settings inactive">
-      <div class="screen-settings__title">
-        <h2>設定</h2>
-      </div>
-      <div class="screen-settings__content">
-        <h3>apiキー</h3>
-        
-        <div class="screen-settings__form-group">
-          <input type="password" class="screen-settings__input" placeholder="ここにAPIキーを入力" style="user-select: text; -webkit-user-select: text;">
-          <button class="screen-settings__button">保存</button>
+      <div class="screen-add inactive">
+        <div class="screen-add__title">
+          <h2>食材の追加</h2>
         </div>
-        <p style="margin-top: 10px; font-size: 14px; color: #666; user-select: text; -webkit-user-select: text;">
-          APIキーをお持ちでない場合は、<a href="https://aistudio.google.com/" target="_blank">Google AI Studio</a> から取得してください。
-        </p>
-      </div>
-    </div>
 
-    <div class="screen-saved-list inactive">
-      <div class="screen-saved-list__title">
-        <h2>保存したレシピ</h2>
-        <button class="js-back-to-recipe-btn">戻る</button>
-      </div>
-      <div class="screen-saved-list__cards">
-        
-      </div>
-    </div>
-    <div class="screen-saved inactive">
-      <div class="screen-saved__title">
-        <h2>レシピ詳細</h2>
-        <button class="js-back-to-saved-list-btn">戻る</button>
-      </div>
-      <div class="screen-saved__content">
-        <h3 class="js-saved-recipe-title"></h3>
-        <div class="js-saved-recipe-date"></div>
-        <div class="js-saved-recipe-ingredients"></div>
-        <div class="js-saved-recipe-body"></div>
-      </div>
-    </div>
-  </main>
-  <script type="module" src="/src/main.js"></script>
-</body>
+        <div class="screen-add__frequent">
+          <div class="screen-add__frequent--meta">
+            <h3 class="screen-add__frequent-title">よく追加するもの</h3>
+            <div class="screen-add__frequent-edit--wrap">
+              <button class="screen-add__frequent-edit">編集</button>
+            </div>
+          </div>
+          <div class="screen-add__frequent-items" id="frequent-items-container">
+            <button type="button" class="btn-add-frequent" id="js-open-frequent-modal-btn">
+              ＋ 登録
+            </button>
+          </div>
+        </div>
 
+        <div class="form__container--frequent js-frequent-modal inactive">
+          <form class="js-frequent-form">
+            <div class="form__group--full">
+              <label class="label">食材名</label>
+              <input type="text" name="name" required />
+            </div>
+
+            <div class="form--row">
+              <div class="form__group">
+                <label class="label">量</label>
+                <input type="number" name="amount" min="0" step="any" />
+              </div>
+
+              <div class="form__group">
+                <label class="label">単位</label>
+                <input type="text" name="unit" />
+              </div>
+
+              <div class="form__group">
+                <label class="label">種類</label>
+                <select name="type">
+                  <option value="賞味期限">賞味期限</option>
+                  <option value="消費期限">消費期限</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form__actions">
+              <button type="submit" class="form__submit">マスターに登録</button>
+              <button type="button" class="form__cancel js-close-frequent-modal-btn">
+                キャンセル
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <div class="form__container">
+          <!-- 識別用に、追加フォームには class="js-add-form" をつけておく -->
+          <form class="js-add-form">
+            <div class="form__group--full">
+              <label class="label">食材名</label>
+              <input type="text" name="name" required />
+            </div>
+
+            <div class="form--row">
+              <div class="form__group">
+                <label class="label">量</label>
+                <input type="number" name="amount" min="0" step="any" required />
+              </div>
+
+              <div class="form__group">
+                <label class="label">単位</label>
+                <input type="text" name="unit" />
+              </div>
+
+              <div class="form__group">
+                <label class="label">期限</label>
+                <input type="date" name="deadline" required />
+              </div>
+
+              <div class="form__group">
+                <label class="label"></label>
+                <select name="type">
+                  <option value="賞味期限">賞味期限</option>
+                  <option value="消費期限">消費期限</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form__group--full">
+              <label class="label" for="food-name">備考</label>
+              <textarea
+                name="notes"
+                placeholder="メモや補足（例：冷凍保存中、早めに使うなど）"
+              ></textarea>
+            </div>
+
+            <button type="submit" class="form__submit">リストに追加</button>
+          </form>
+        </div>
+
+        <div class="mini-food-list">
+          <h3 class="mini-food-list__title">最近追加した食材</h3>
+          <div class="mini-food-list__items"></div>
+        </div>
+      </div>
+
+      <div class="screen-manage inactive">
+        <div class="screen-manage__header">
+          <div class="screen-manage__title">
+            <h2>食材の管理</h2>
+          </div>
+
+          <div class="sort-container">
+            <select id="manage-sort-order">
+              <option value="deadline">期限が近い順</option>
+              <option value="created_at">登録が新しい順</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="food-list">
+          <div class="food-list__items" id="manage-food-list"></div>
+        </div>
+      </div>
+
+      <div class="screen-settings inactive">
+        <div class="screen-settings__title">
+          <h2>設定</h2>
+        </div>
+        <div class="screen-settings__content">
+          <h3>apiキー</h3>
+
+          <div class="screen-settings__form-group">
+            <input
+              type="password"
+              class="screen-settings__input"
+              placeholder="ここにAPIキーを入力"
+            />
+            <button class="screen-settings__button">保存</button>
+          </div>
+          <p
+            style="
+              margin-top: 10px;
+              font-size: 14px;
+              color: #666;
+              user-select: text;
+              -webkit-user-select: text;
+            "
+          >
+            APIキーをお持ちでない場合は、<a href="https://aistudio.google.com/" target="_blank"
+              >Google AI Studio</a
+            >
+            から取得してください。
+          </p>
+        </div>
+      </div>
+
+      <div class="screen-saved-list inactive">
+        <div class="screen-saved-list__title">
+          <h2>保存したレシピ</h2>
+          <button class="js-back-to-recipe-btn">戻る</button>
+        </div>
+        <div class="screen-saved-list__cards"></div>
+      </div>
+      <div class="screen-saved inactive">
+        <div class="screen-saved__title">
+          <h2>レシピ詳細</h2>
+          <button class="js-back-to-saved-list-btn">戻る</button>
+        </div>
+        <div class="screen-saved__content">
+          <h3 class="js-saved-recipe-title"></h3>
+          <div class="js-saved-recipe-date"></div>
+          <div class="js-saved-recipe-ingredients"></div>
+          <div class="js-saved-recipe-body"></div>
+        </div>
+      </div>
+    </main>
+    <script type="module" src="/src/main.js"></script>
+  </body>
 </html>

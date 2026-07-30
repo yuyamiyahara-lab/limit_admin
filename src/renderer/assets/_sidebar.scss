@@ -1,71 +1,71 @@
 @use 'variables' as *;
 
 .sidebar {
-    &__wrap {
-        align-items: center;
-        display: flex;
-        flex-direction: column;
-        gap: 72px;
-        padding: 80px 0;
+  &__wrap {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    gap: 72px;
+    padding: 80px 0;
+  }
+
+  &__title {
+    align-items: center;
+    color: $bg-body;
+    display: flex;
+    font-size: 30px;
+    font-weight: bold;
+    gap: 4px;
+
+    img {
+      height: 48px;
+      width: 48px;
     }
+  }
 
-    &__title {
-        align-items: center;
-        color: $bg-body;
-        display: flex;
-        font-size: 30px;
-        font-weight: bold;
-        gap: 4px;
+  &__nav {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
 
-        img {
-            height: 48px;
-            width: 48px;
-        }
+    &-btn {
+      align-items: center;
+      border: 2px solid $primary-border;
+      border-radius: $radius-md;
+      color: $bg-body;
+      display: flex;
+      font-size: 20px;
+      font-weight: 500;
+      gap: 10px;
+      height: 44px;
+      transition: $transition;
+      width: 200px;
+
+      &:hover {
+        background-color: #738e45;
+        border-color: #d9e2c9;
+      }
+
+      img {
+        height: 30px;
+        margin-left: 20px;
+        width: 30px;
+      }
+
+      &.active {
+        background-color: $primary-color-light;
+        border: none;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
+        cursor: default;
+      }
     }
+  }
 
-    &__nav {
-        display: flex;
-        flex-direction: column;
-        gap: 20px;
+  &__control {
+    display: flex;
 
-        &-btn {
-            align-items: center;
-            border: 2px solid $primary-border;
-            border-radius: $radius-md;
-            color: $bg-body;
-            display: flex;
-            font-size: 20px;
-            font-weight: 500;
-            gap: 10px;
-            height: 44px;
-            transition: $transition;
-            width: 200px;
-
-            &:hover {
-                background-color: #738E45;
-                border-color: #D9E2C9;
-            }
-
-            img {
-                height: 30px;
-                margin-left: 20px;
-                width: 30px;
-            }
-
-            &.active {
-                background-color: $primary-color-light;
-                border: none;
-                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
-                cursor: default;
-            }
-        }
+    button {
+      display: block;
     }
-
-    &__control {
-        display: flex;
-
-        button {
-            display: block;
-        }
-    }
+  }
 }

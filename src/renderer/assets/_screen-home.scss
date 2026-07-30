@@ -12,25 +12,22 @@
     align-items: center;
     width: 200px;
     height: 100px;
-    background-color: #FCFCFC;
+    background-color: #fcfcfc;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
     padding: 18px;
-
   }
 
   &__number {
     font-size: 30px;
     font-weight: bold;
-    color: #556B2F;
+    color: #556b2f;
   }
 
   &__text {
     font-size: 14px;
     color: #444444;
   }
-
-
 }
 
 .screen-home {
@@ -38,11 +35,9 @@
   padding: 30px 55px;
 
   .food-list {
-
     width: 100%;
 
     margin-top: 30px;
-
 
     box-sizing: border-box;
 
@@ -50,30 +45,25 @@
       display: inline-block;
       margin: 0 0 30px;
 
-      color: #556B2F;
+      color: #556b2f;
 
       font-size: 20px;
 
       font-weight: 600;
 
-      border-bottom: 2px solid #556B2F;
+      border-bottom: 2px solid #556b2f;
     }
 
     &__items {
-
       display: flex;
 
       flex-direction: column;
 
       gap: 16px;
-
     }
-
   }
 
-
   .card {
-
     // 初期状態はニュートラル
     padding: 10px 25px 10px 30px;
 
@@ -106,8 +96,7 @@
     // 左側のステータスライン
 
     &::before {
-
-      content: "";
+      content: '';
 
       position: absolute;
 
@@ -124,19 +113,13 @@
       border-radius: $radius-md 0 0 $radius-md;
 
       z-index: -1;
-
     }
-
-
 
     &__meta {
       width: 160px;
-
-
     }
 
     &__name {
-
       margin-bottom: 8px;
 
       color: $text-main;
@@ -144,12 +127,9 @@
       font-size: 16px;
 
       font-weight: 700;
-
-
     }
 
     &__deadline {
-
       color: $text-muted;
 
       font-size: 14px;
@@ -159,11 +139,9 @@
       line-height: 1.4;
 
       white-space: nowrap;
-
     }
 
     &__amount {
-
       color: $text-main;
 
       font-size: 16px;
@@ -175,12 +153,9 @@
       white-space: nowrap;
 
       width: 140px;
-
     }
 
     &__days-left {
-
-
       color: var(--status-color);
 
       background-color: var(--status-bg);
@@ -204,31 +179,28 @@
       width: fit-content;
 
       padding: 4px 15px;
-
     }
 
     &__deadline--warning {
       &::before {
-        background-color: #E67E22;
+        background-color: #e67e22;
       }
 
       .card__days-left {
-        color: #E67E22;
-        background-color: #F2D0B2;
+        color: #e67e22;
+        background-color: #f2d0b2;
       }
     }
 
     &__deadline--caution {
       &::before {
-        background-color: #F1C40F;
+        background-color: #f1c40f;
       }
 
       .card__days-left {
-        color: #F1C40F;
-        background-color: #F8EEC7;
+        color: #f1c40f;
+        background-color: #f8eec7;
       }
     }
-
-
   }
 }

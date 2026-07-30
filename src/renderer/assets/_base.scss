@@ -8,34 +8,44 @@
 }
 
 // ① 箱のサイズ計算を直感的にする（必須級！）
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
   margin: 0;
 }
 
 // ② アプリ全体のベース設定
 body {
-  margin: 0;       // ブラウザ特有の謎の隙間を消す
+  margin: 0; // ブラウザ特有の謎の隙間を消す
   padding: 0;
-  font-family: 'NotoSansJP', 'Segoe UI', Meiryo, system-ui, sans-serif; // OSに合わせた綺麗なフォント
+  font-family:
+    'NotoSansJP', 'Segoe UI', Meiryo, system-ui, sans-serif; // OSに合わせた綺麗なフォント
   background-color: #f5f5f5; // アプリの背景色（好きな色でOK）
-  color: #333;               // 基本の文字色
-  
+  color: #333; // 基本の文字色
+
   // ③ デスクトップアプリ特有の魔法
   user-select: none; // 文字をドラッグして青く選択できなくする（アプリっぽくなる！）
+}
+
+input,
+textarea,
+select {
+  user-select: text;
+  -webkit-user-select: text;
 }
 
 // ボタンのデフォルトスタイルを完全にリセットする
 button {
   background: transparent; // 背景色を透明に
-  border: none;            // 枠線を消す
-  padding: 0;              // デフォルトの内側の余白を消す
-  margin: 0;               // デフォルトの外側の余白を消す
-  font: inherit;           // フォント（種類やサイズ）を周りの文字に合わせる
-  color: inherit;          // 文字色を周りに合わせる
-  cursor: pointer;         // マウスを乗せた時に「指マーク」にする
-  outline: none;           // クリックした時に出る青い枠線を消す
-  appearance: none;        // OS特有のボタンデザインを無効化する
+  border: none; // 枠線を消す
+  padding: 0; // デフォルトの内側の余白を消す
+  margin: 0; // デフォルトの外側の余白を消す
+  font: inherit; // フォント（種類やサイズ）を周りの文字に合わせる
+  color: inherit; // 文字色を周りに合わせる
+  cursor: pointer; // マウスを乗せた時に「指マーク」にする
+  outline: none; // クリックした時に出る青い枠線を消す
+  appearance: none; // OS特有のボタンデザインを無効化する
 }
 
 body {
@@ -46,20 +56,20 @@ body {
 }
 
 .sidebar {
-    background-color: $primary-color;
-    width: 250px;
-    flex-shrink: 0;
-    
-    // 【ここを追加】高さを画面いっぱいに指定
-    height: 100%; 
+  background-color: $primary-color;
+  width: 250px;
+  flex-shrink: 0;
+
+  // 【ここを追加】高さを画面いっぱいに指定
+  height: 100%;
 }
 
 .main {
-    background-color: $bg-body;
-    flex-grow: 1;
-    
-    // 【ここを追加】高さを画面いっぱいに指定
-    height: 100%; 
+  background-color: $bg-body;
+  flex-grow: 1;
+
+  // 【ここを追加】高さを画面いっぱいに指定
+  height: 100%;
 }
 
 .inactive {

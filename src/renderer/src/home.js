@@ -4,52 +4,52 @@
 
 // 画面が読み込まれたらリストを表示する
 document.addEventListener('DOMContentLoaded', () => {
-  renderHomeFoodList();
-});
+  renderHomeFoodList()
+})
 
 // 他の画面（追加・管理画面など）でもリストの再描画を行うために export しておく
 export async function renderHomeFoodList() {
   // ホーム画面の表示先コンテナ
-  const container = document.querySelector('.food-list__items');
-  if (!container) return;
+  const container = document.querySelector('.food-list__items')
+  if (!container) return
 
   try {
-    const ingredients = await window.api.getIngredients();
-    container.innerHTML = '';
+    const ingredients = await window.api.getIngredients()
+    container.innerHTML = ''
 
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
+    const today = new Date()
+    today.setHours(0, 0, 0, 0)
 
     // ★ サマリー用のカウント変数
-    let expiringCount = 0;
-    const totalCount = ingredients.length;
+    let expiringCount = 0
+    const totalCount = ingredients.length
 
-    ingredients.forEach(item => {
+    ingredients.forEach((item) => {
       // 日数計算
-      const deadlineDate = new Date(item.deadline);
-      const diffTime = deadlineDate - today;
-      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+      const deadlineDate = new Date(item.deadline)
+      const diffTime = deadlineDate - today
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
 
       // ★ 3日以内（マイナス＝超過も含む）ならカウントアップ
       if (diffDays <= 3) {
-        expiringCount++;
+        expiringCount++
       }
 
       // 残り日数の表示テキスト
-      let daysLeftText = '';
-      let statusClass = '';
+      let daysLeftText = ''
+      let statusClass = ''
       if (diffDays < 0) {
-        daysLeftText = `${Math.abs(diffDays)}日超過`;
+        daysLeftText = `${Math.abs(diffDays)}日超過`
       } else {
-        daysLeftText = `あと${diffDays}日`;
+        daysLeftText = `あと${diffDays}日`
       }
 
       if (diffDays <= 3) {
-        statusClass = 'card__deadline--warning';
+        statusClass = 'card__deadline--warning'
       } else if (diffDays <= 7) {
-        statusClass = 'card__deadline--caution';
+        statusClass = 'card__deadline--caution'
       } else {
-        statusClass = 'card__deadline--normal';
+        statusClass = 'card__deadline--normal'
       }
 
       const cardHTML = `
@@ -61,19 +61,18 @@ export async function renderHomeFoodList() {
           <div class="card__amount">${item.amount}${item.unit}</div>
           <div class="card__days-left ${statusClass}">${daysLeftText}</div>
         </div>
-      `;
+      `
 
-      container.insertAdjacentHTML('beforeend', cardHTML);
-    });
+      container.insertAdjacentHTML('beforeend', cardHTML)
+    })
 
     // ★ ループが終わったら画面上部のサマリー数値を更新
-    const expiringElement = document.getElementById('expiring-count');
-    const registeredElement = document.getElementById('registered-count');
-    
-    if (expiringElement) expiringElement.textContent = expiringCount;
-    if (registeredElement) registeredElement.textContent = totalCount;
+    const expiringElement = document.getElementById('expiring-count')
+    const registeredElement = document.getElementById('registered-count')
 
+    if (expiringElement) expiringElement.textContent = expiringCount
+    if (registeredElement) registeredElement.textContent = totalCount
   } catch (error) {
-    console.error('データの取得に失敗しました:', error);
+    console.error('データの取得に失敗しました:', error)
   }
 }
